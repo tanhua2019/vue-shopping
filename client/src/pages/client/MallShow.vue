@@ -220,35 +220,6 @@ export default {
       display: flex;
     }
   }
-  // .logo {
-  //   display: block;
-  //
-  //   text-align: right;
-  //   user-select: none;
-  //   vertical-align: middle;
-  //   img {
-  //     display: inline-block;
-  //     width: 33.3%;
-  //     vertical-align: middle;
-  //   }
-  //   .searchBox {
-  //     display: inline-block;
-  //     width: 33.3%;
-  //     vertical-align: middle;
-  //     text-align: left;
-  //     .TipsInput {
-  //       margin-left: 30px;
-  //     }
-  //     .icon-search {
-  //       font-size: 24px;
-  //       font-weight: bold;
-  //       color: @thirdColor;
-  //       cursor: pointer;
-  //       position: relative;
-  //       top: 4px;
-  //     }
-  //   }
-  // }
   .typeList {
     width: 100%;
     text-align: center;
