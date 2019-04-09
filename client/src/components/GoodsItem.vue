@@ -14,22 +14,22 @@
 export default {
   name: 'GoodsItem',
   props:{
-    id:{
-      type:Number,
-      default:0
+    id: {
+      type: Number,
+      default: 0
     },
-    img:{
-      type:String,
-      default:''
+    name: {
+      type: String,
+      default: ''
     },
-    name:{
-      type:String,
-      default:''
+    img: {
+      type: String,
+      default: ''
     },
-    price:{
-      type:Number,
-      default:0
-    },
+    price: {
+      type: Number,
+      default: 0
+    }
   },
   data(){
     return{

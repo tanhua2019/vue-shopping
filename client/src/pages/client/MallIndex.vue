@@ -14,16 +14,16 @@
         :showWidth="(266*4)+(10*3)"
         :height="360"
       >
-        <ul class="goodsList" :style="{width:`${(266*goodsList.length)+(10*(goodsList.length-1))}px`}" slot="list">
+        <ul :style="{width:`${(266*goodsList.length)+(10*(goodsList.length-1))}px`}" slot="list">
           <GoodsItem
-            v-for="(item,index) in goodsList"
-            :style="{marginRight: (index+1)%4===0?'0px':'10px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
+          :style="{marginRight: (index+1)%4 === 0? '0px':'10px'}"
+          v-for="(item,index) in goodsList"
+          :key="index"
+          :id="item.id"
+          :img="item.img"
+          :name="item.name"
+          :price="item.price">
+          </GoodsItem>
         </ul>
       </Slick>
     </section>
@@ -42,7 +42,7 @@
             <span class="time">{{s}}</span>
           </div>
           <div class="allBtn">查看全部 ></div>
-        </div><ul class="right"><li v-for="(item,index) in goodsList.slice(0,4)" :key="item.id">
+        </div><ul class="right"><li v-for="(item,index) in goodsList.slice(0,4)" :key="index">
             <img class="leftImg" :src="item.img" />
             <div class="rightBox">
               <p class="goodsName ellipsis" @click="navTo('/mall/goods/'+item.id)">{{item.name}}</p>
@@ -119,7 +119,7 @@
         </div>
       </div>
     </section>
-    <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="item.id">
+    <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="index">
       <SectionHeader :title="item.name" tips="" moreText="查看更多>" @click.native="selectType(item.id)"/>
       <ul class="content">
           <GoodsItem
@@ -199,22 +199,6 @@ export default {
         alert(e);
       })
     },
-    searchTip(tip){
-      alert(tip)
-    },
-    inputTextChange(text){
-    },
-    scrollHandle(){
-      const top = this.$refs.typeList.getBoundingClientRect().top;
-      //还未到顶
-      if(top>0){
-        this.navShouldFixed=false;
-      }
-      //已经到顶
-      else{
-        this.navShouldFixed=true;
-      }
-    }
   },
 
   mounted(){
@@ -251,7 +235,6 @@ export default {
     clearInterval(this.timer);
     this.timer = null;
   },
-
 }
 </script>
 

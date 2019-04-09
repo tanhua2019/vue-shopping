@@ -19,7 +19,7 @@
       <div class="container">
         <router-view></router-view>
       </div>
-      <div class="fixedAd">
+      <div class="fixedAd" v-show="shouldShowBT">
         <img src="../../assets/img/nav.gif" alt="" />
         <ul class="fixedList">
           <li>
@@ -34,7 +34,7 @@
             <i class="iconfont icon-fabulous" />
             <span>用户反馈</span>
           </li>
-          <li @click="backToTop" v-show="shouldShowBT">
+          <li @click="backToTop">
             <i class="iconfont icon-arrows-4-7" />
             <span>回顶部</span>
           </li>
@@ -144,14 +144,13 @@ export default {
     },
     watchScrollTop(){
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      if(scrollTop>150){
+      if(scrollTop>600&&scrollTop<3700){
         this.shouldShowBT = true;
       }else{
         this.shouldShowBT = false;
       }
     }
   },
-
   mounted(){
     document.addEventListener('scroll',this.watchScrollTop,false);
   },

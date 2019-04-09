@@ -18,7 +18,7 @@
         <input ref="signRecipient" type="text" placeholder="请输入收件人">
         <input ref="signAddress" type="text" placeholder="请输入地址">
         <input ref="signPhone" type="text" placeholder="请输入手机号">
-        
+
         <button @click="signup">注册</button>
       </div>
     </div>
@@ -104,7 +104,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: url(../../assets/img/time.jpg) no-repeat 100% 100%;
+  background: url(../../assets/img/admin.jpg) no-repeat 100% 100%;
   img {
     width: 100%;
     height: 100%;

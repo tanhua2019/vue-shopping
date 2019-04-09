@@ -1,8 +1,8 @@
 <template>
     <div class="FadeSwiper" :style="{width:width,height:height}" @mouseover.stop="clearTimer" @mouseout.stop="setTimer">
       <div class="swiperWrapper">
-        <div class="swiperItem" v-for="(item,index) in len" :style="{opacity:curIndex===index?1:0}">
-          <slot :name="'item'+(index+1)"></slot>
+        <div class="swiperItem" v-for="(item,index) in len" :style="{opacity:curIndex===index?1:0}" :key="index">
+          <slot :name="'item'+item"></slot>
         </div>
       </div>
       <div class="prev arrow" @click="prev"><i class="iconfont icon-return" /></div>
@@ -62,6 +62,7 @@ export default {
     }
   },
   mounted(){
+    console.log(this.len,'0000');
     this.setTimer();
   },
   beforeDestroyed(){

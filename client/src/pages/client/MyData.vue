@@ -1,36 +1,51 @@
 <template>
-  <div class="MyData">
-    <ul>
-      <li>
-        <span>用户头像</span>
-        <img :src="headimg" alt="headimg">
-      </li>
-      <li>
-        <span>账号</span>
-        <p>{{email}}</p>
-      </li>
-      <li>
-        <span>昵称</span>
-        <input type="text" v-model="nickname">
-      </li>
-      <li>
-        <span>收件人</span>
-        <input type="text" v-model="recipient">
-      </li>
-      <li>
-        <span>收件地址</span>
-        <input type="text" class="long" v-model="address">
-      </li>
-      <li>
-        <span>联系电话</span>
-        <input type="text" v-model="phone">
-      </li>
-      <li>
-        <span>密码</span>
-        <button @click="showPopup">修改密码</button>
-      </li>
-    </ul>
-    <button @click="updateUserData" class="saveBtn">保存</button>
+  <div class="personBox">
+    <div class="headBox">
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+      >
+        <img v-if="headimg" :src="headimg" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+    </div>
+    <div class="inputBox">
+      <div class="content">
+        <span>账号:</span>
+      </div>
+      <input v-model="email" disabled>
+    </div>
+    <div class="inputBox">
+      <div class="content">
+        <span>昵称:</span>
+      </div>
+      <input v-model="nickname">
+    </div>
+    <div class="inputBox">
+      <div class="content">
+        <span>收件人:</span>
+      </div>
+      <input v-model="recipient">
+    </div>
+    <div class="inputBox">
+      <div class="content">
+        <span>收件地址:</span>
+      </div>
+      <input v-model="address">
+    </div>
+    <div class="inputBox">
+      <div class="content">
+        <span>联系电话:</span>
+      </div>
+      <input v-model="phone">
+    </div>
+    <div class="buttonBox">
+      <button @click="showPopup">修改密码</button>
+      <button @click="updateUserData">确认保存</button>
+    </div>
     <Popup title="修改密码" @popupClose="closePopup" v-show="popupShow">
       <div class="popupContent" slot="popupContent">
         <input type="password" v-model="oldPwd" placeholder="请输入原密码">
@@ -44,16 +59,12 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { getUserData, updateUserData, updatePwd } from "../../api/client";
 import Popup from "../../components/Popup";
-
+import { getUserData, updateUserData, updatePwd } from "../../api/client";
 export default {
-  name: "MyData",
+  name: "",
   components: {
     Popup
-  },
-  computed: {
-    ...mapState(["clientToken"])
   },
   data() {
     return {
@@ -70,13 +81,32 @@ export default {
       confirmPwd: ""
     };
   },
-
+  mounted() {
+    getUserData(this.clientToken)
+      .then(data => {
+        this.id = data.id;
+        this.headimg = data.headimg;
+        this.email = data.email;
+        this.nickname = data.nickname;
+        this.recipient = data.recipient;
+        this.address = data.address;
+        this.phone = data.phone;
+      })
+      .catch(e => {
+        alert(e);
+      });
+  },
+  computed: {
+    ...mapState(["clientToken"])
+  },
   methods: {
     ...mapMutations({
       setClientName: "SET_CLIENT_NAME"
     }),
     updateUserData() {
+      console.log(this.headimg, "9999");
       updateUserData({
+        headimg: this.headimg,
         id: this.id,
         nickname: this.nickname,
         recipient: this.recipient,
@@ -99,6 +129,7 @@ export default {
       this.popupShow = false;
     },
     showPopup() {
+      console.log("0000");
       this.popupShow = true;
     },
     updatePwd() {
@@ -122,90 +153,88 @@ export default {
           this.confirmPwd = "";
           this.closePopup();
           this.$message({
-          message: "修改密码成功!",
-          type: "success",
-          duration: 1000
-        });
+            message: "修改密码成功!",
+            type: "success",
+            duration: 1000
+          });
         })
         .catch(e => {
           alert(e);
         });
-    }
-  },
+    },
+    handleAvatarSuccess(res, file) {
+      this.headimg = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg";
+      const isLt2M = file.size / 1024 / 1024 < 2;
 
-  mounted() {
-    getUserData(this.clientToken)
-      .then(data => {
-        this.id = data.id;
-        this.headimg = data.headimg;
-        this.email = data.email;
-        this.nickname = data.nickname;
-        this.recipient = data.recipient;
-        this.address = data.address;
-        this.phone = data.phone;
-      })
-      .catch(e => {
-        alert(e);
-      });
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      return isJPG && isLt2M;
+    }
   }
 };
 </script>
 
-<style scoped lang="less">
-@import "../../assets/css/var.less";
-.MyData {
-  ul {
+<style lang='less' scoped>
+.personBox {
+  width: 100%;
+  height: 100%;
+  background: #f6f4ef;
+  border: 3px solid #ccc;
+  .headBox {
     width: 100%;
-    overflow: hidden;
-    li {
-      margin-bottom: 30px;
-      &:first-child {
-        height: 60px;
-        line-height: 60px;
-        span {
-          position: relative;
-          bottom: 18px;
-        }
-      }
-      span {
-        display: inline-block;
-        width: 100px;
-        height: 20px;
-      }
-      img {
-        display: inline-block;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-      }
-      p {
-        display: inline-block;
-      }
-      input {
-        width: 280px;
-        border: none;
-        text-align: center;
-        border-bottom: 2px solid @thirdColor;
-      }
-      .long {
-      }
-      button {
-        background-color: white;
-        border: 1px solid @thirdColor;
-        color: @thirdColor;
-        width: 80px;
-        height: 30px;
-      }
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img {
+      display: block;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
     }
   }
-  .saveBtn {
-    background-color: @thirdColor;
-    border: none;
-    color: white;
-    width: 110px;
-    height: 35px;
-    display: block;
-    margin: 10px auto;
+  .inputBox {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .content {
+      width: 100px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    input {
+      border: none;
+      border: 1px solid #ccc;
+      width: 25%;
+      height: 40px;
+      border-radius: 10px;
+      padding-left: 20px;
+    }
+  }
+  .buttonBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    button {
+      margin: 20px;
+      padding: 10px 20px;
+      background-color: #b4a078;
+      color: white;
+      border: none;
+      border-radius: 30px;
+    }
   }
   .popupContent {
     padding: 20px;

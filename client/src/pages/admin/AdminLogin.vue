@@ -1,102 +1,112 @@
 <template>
   <div class="AdminLogin" :style="{width:width+'px',height:height+'px'}">
-    <div class="content">
-      <h3>购物商城</h3>
-      <P>后台管理系统</P>
-      <input ref="account" type="text" placeholder="账号" />
-      <input ref="pwd" type="password" placeholder="密码" />
-      <button @click="login">登录</button>
+    <div class="login_box">
+      <p>购物商城后台系统</p>
+      <div class="formBox">
+        <input ref="account" type="text" placeholder="账号">
+        <input ref="pwd" type="password" placeholder="密码">
+        <button @click="login">登录</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-import {getClientSize} from '../../util/util';
-import {login} from '../../api/admin';
+import { mapMutations } from "vuex";
+import { getClientSize } from "../../util/util";
+import { login } from "../../api/admin";
 
 export default {
-  name: 'AdminLogin',
-  computed:{
-    width(){
+  name: "AdminLogin",
+  computed: {
+    width() {
       return getClientSize().width;
     },
-    height(){
+    height() {
       return getClientSize().height;
-    },
-  },
-  data () {
-    return {
     }
   },
-  methods:{
+  data() {
+    return {};
+  },
+  methods: {
     ...mapMutations({
-      setAdminName: 'SET_ADMIN_NAME',
-      setAdminToken: 'SET_ADMIN_TOKEN'
+      setAdminName: "SET_ADMIN_NAME",
+      setAdminToken: "SET_ADMIN_TOKEN"
     }),
-    login(){
+    login() {
       const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
       const res = login({
-        account:account,
-        pwd:pwd
+        account: account,
+        pwd: pwd
       });
       res
-      .then((data)=>{
-        this.setAdminName(data.name);
-        this.setAdminToken(data.token);
-        this.$router.push('/backstage');
-      })
-      .catch((e)=>{
-        alert('登录失败')
-      })
+        .then(data => {
+          this.setAdminName(data.name);
+          this.setAdminToken(data.token);
+          this.$router.push("/backstage");
+        })
+        .catch(e => {
+          alert("登录失败");
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
-.AdminLogin{
+.AdminLogin {
   background-color: @bgColor;
   position: relative;
-  .content{
-    width: 300px;
-    height: 360px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: url(../../assets/img/time.jpg) no-repeat 100% 100%;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  .login_box {
+    width: 330px;
+    height: 300px;
+    border-radius: 10px;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -180px;
-    margin-left: -150px;
-    text-align: center;
-    overflow: hidden;
-    h3{
-      color:@secondColor;
-      font-size: 50px;
+    top: 20%;
+    left: 200px;
+    p {
+      background: rgba(255, 255, 255, 0.5);
+      padding-top: 30px;
+      text-align: center;
+      font-size: 20px;
+      border-radius: 20px 20px 0 0;
     }
-    p{
-      margin-top: 20px;
-      color:@fontDefaultColor;
-      margin-bottom: 20px;
-    }
-    input{
-      border-radius: 0;
-      box-shadow: none;
-      background: #fff;
-      padding: 14px;
-      width: 80%;
-      border: 1px solid @borderColor;
-    }
-    button{
-      width: 90%;
-      background: @secondColor;
-      box-shadow: none;
-      border: 0;
-      border-radius: 3px;
-      line-height: 41px;
-      color: #fff;
-      cursor: pointer;
-      margin-top: 20px;
+    .formBox {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 20px 0;
+      border-radius: 0 0 20px 20px;
+      input {
+        width: 70%;
+        height: 50px;
+        padding: 18px;
+        margin-bottom: 10px;
+        border: 1px solid @borderColor;
+        border-radius: 15px;
+      }
+      button {
+        width: 40%;
+        background: @secondColor;
+        border: 0;
+        border-radius: 50px;
+        line-height: 40px;
+        color: #fff;
+        cursor: pointer;
+      }
     }
   }
 }

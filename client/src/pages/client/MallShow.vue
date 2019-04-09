@@ -114,11 +114,6 @@ export default {
         this.navTo("/mall/show/goodsList/" + typeId + "/all");
       }
     },
-    searchTip(tip) {
-      // alert(tip)
-      this.searchText = tip;
-      console.log();
-    },
     searchTextChange(text) {
       this.searchText;
     },
@@ -140,8 +135,8 @@ export default {
         this.navShouldFixed = true;
       }
     },
-    querySearch(queryString, cb) {
 
+    querySearch(queryString, cb) {
       var searchList = this.searchList;
       console.log(this.searchList,'009');
       var results = queryString
@@ -161,7 +156,6 @@ export default {
   },
 
   mounted() {
-    // this.getGoodsList(-1);
     //获取数据
     const res = getTypes();
     res
@@ -295,5 +289,13 @@ export default {
 .el-input.is-active .el-input__inner,
 .el-input__inner:focus {
   border-color: #b4a078;
+}
+.el-input__icon {
+ width: 40px;
+ font-size: 25px;
+ margin-left: 5px;
+}
+.el-input--prefix .el-input__inner {
+  padding-left: 50px;
 }
 </style>
