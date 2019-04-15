@@ -34,6 +34,14 @@
           <p>搜索</p>
         </div>
       </div>
+      <div class="car" v-show="token" @click="navTo('/mall/personal/cart')">
+        <i class="el-icon-goods">
+          <span>购物车</span>
+          <span class="cars">
+            <span>{{car}}</span>
+          </span>
+        </i>
+      </div>
     </div>
     <ul ref="typeList" class="typeList">
       <li
@@ -48,8 +56,9 @@
 </template>
 
 <script>
-import { getTypes, getGoodsList } from "../../api/client";
+import { getTypes, getGoodsList, getOrderByState } from "../../api/client";
 import FixedNav from "../../components/FixedNav";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "MallShow",
@@ -58,35 +67,57 @@ export default {
     FixedNav
   },
   computed: {
+    ...mapState(["car", "clientToken"]),
     curPath() {
       return this.$route.path;
     }
   },
   data() {
     return {
+      token: false,
+      orderList: {
+        goods: []
+      },
       typeList: [],
       searchText: "",
       navShouldFixed: false,
       searchList: [
-        {value: "男式经典基础西装套"},
-        {value: "竹语初棉撞色四件套"},
-        {value: "全棉针织条纹四件套"},
-        {value: "男式三防商务休闲裤"},
-      ],
+        { value: "男式经典基础西装套" },
+        { value: "竹语初棉撞色四件套" },
+        { value: "全棉针织条纹四件套" },
+        { value: "男式三防商务休闲裤" }
+      ]
     };
   },
-
+  created() {
+    this.cars();
+  },
   methods: {
-    getGoodsList(typeId){
+    ...mapMutations({
+      showCar: "SHOWCAR"
+    }),
+    cars() {
+      if (this.clientToken) {
+        this.token = true;
+      }
+    },
+    getOrderState(state) {
+      getOrderByState(state, this.clientToken).then(res => {
+        console.log(res.length, "99999");
+        this.showCar(JSON.stringify(res.length));
+      });
+    },
+    getGoodsList(typeId) {
       const res = getGoodsList(typeId);
-      res.then((data)=>{
-        console.log('9999');
-        this.searchList = data;
-        console.log(this.searchList);
-      })
-      .catch((e)=>{
-        alert(e);
-      })
+      res
+        .then(data => {
+          console.log("9999");
+          this.searchList = data;
+          console.log(this.searchList);
+        })
+        .catch(e => {
+          alert(e);
+        });
     },
     navTo(route) {
       this.$router.push(route);
@@ -138,7 +169,7 @@ export default {
 
     querySearch(queryString, cb) {
       var searchList = this.searchList;
-      console.log(this.searchList,'009');
+      console.log(this.searchList, "009");
       var results = queryString
         ? searchList.filter(this.createFilter(queryString))
         : searchList;
@@ -147,16 +178,14 @@ export default {
     },
     createFilter(queryString) {
       return a => {
-        return (
-          a.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
+        return a.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
       };
     }
   },
 
   mounted() {
-    //获取数据
+    this.getOrderState(0); //获取数据
+    // this.showCars();
     const res = getTypes();
     res
       .then(data => {
@@ -194,6 +223,7 @@ export default {
     height: 150px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .searchBox {
       display: flex;
       align-items: center;
@@ -212,6 +242,36 @@ export default {
         }
       }
       display: flex;
+    }
+    .car {
+      width: 120px;
+      height: 50px;
+      border: 2px solid #b4a078;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      i {
+        font-size: 18px;
+        color: #b4a078;
+      }
+      .cars {
+        position: absolute;
+        right: -14px;
+        top: -14px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50% 50% 50% 0;
+        background: red;
+        span {
+          color: #fff;
+        }
+      }
     }
   }
   .typeList {
@@ -275,27 +335,29 @@ export default {
 }
 </style>
 
-<style>
-.el-input__inner {
-  border: 2px solid #b4a078;
-  padding-left: 4px;
-  width: 500px;
-  height: 50px;
-  border-radius: 50px 0 0 50px;
-}
-.el-input__inner:hover {
-  border-color: #b4a078;
-}
-.el-input.is-active .el-input__inner,
-.el-input__inner:focus {
-  border-color: #b4a078;
-}
-.el-input__icon {
- width: 40px;
- font-size: 25px;
- margin-left: 5px;
-}
-.el-input--prefix .el-input__inner {
-  padding-left: 50px;
+<style lang="less">
+.MallShow {
+  .el-input__inner {
+    border: 2px solid #b4a078;
+    padding-left: 4px;
+    width: 500px;
+    height: 50px;
+    border-radius: 50px 0 0 50px;
+  }
+  .el-input__inner:hover {
+    border-color: #b4a078;
+  }
+  .el-input.is-active .el-input__inner,
+  .el-input__inner:focus {
+    border-color: #b4a078;
+  }
+  .el-input__icon {
+    width: 40px;
+    font-size: 25px;
+    margin-left: 5px;
+  }
+  .el-input--prefix .el-input__inner {
+    padding-left: 50px;
+  }
 }
 </style>

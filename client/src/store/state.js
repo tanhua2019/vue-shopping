@@ -7,6 +7,9 @@ const state = {
   //客户商城
   clientName:getLocalItem('clientName')?getLocalItem('clientName'):'',
   clientToken:getLocalItem('clientToken')?getLocalItem('clientToken'):null,
+
+  //购物车数量
+  car:getLocalItem('car')?getLocalItem('car'):null, 
 }
 
 export default state;

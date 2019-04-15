@@ -48,9 +48,9 @@
                 <div class="commentInfo">
                   <div class="starList">
                     <i
-                      class="iconfont icon-collection_fill" 
-                      v-for="(star,index) in (item.score/20)" 
-                      :key="item.id+''+index" 
+                      class="iconfont icon-collection_fill"
+                      v-for="(star,index) in (item.score/20)"
+                      :key="item.id+''+index"
                     />
                   </div>
                   <p class="specName">{{item.specName}}</p>
@@ -87,8 +87,8 @@
       <section class="typeGoods rightContainer">
         <div class="title">相似商品</div>
         <ul class="list">
-          <GoodsItem 
-            v-for="(item,index) in filterList" 
+          <GoodsItem
+            v-for="(item,index) in filterList"
             :key="+item.id"
             :id="item.id"
             :img="item.img"
@@ -102,8 +102,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import {getGoodsInfo,getGoodsMsg,askGoodsMsg,addOrder,getComment,getGoodsList} from '../../api/client';
+import { mapState, mapMutations } from 'vuex';
+import {getGoodsInfo,getGoodsMsg,askGoodsMsg,addOrder,getComment,getGoodsList,getOrderByState} from '../../api/client';
 import NumberInput from '../../components/NumberInput';
 import Radio from '../../components/Radio';
 import GoodsItem from '../../components/GoodsItem';
@@ -118,13 +118,13 @@ export default {
   computed:{
     ...mapState([
       'clientToken',
-      'clientName'
+      'clientName',
     ]),
     id(){
       return this.$route.params.id;
     },
     goodsPrice(){
-      let unitPrice = 0; 
+      let unitPrice = 0;
       this.specs.map((item,index)=>{
         if(item.id===this.temSpecId){
           unitPrice = Number(item.unitPrice);
@@ -133,7 +133,7 @@ export default {
       return (this.num*unitPrice);
     },
     temStockNum(){
-      let stockNum = 0; 
+      let stockNum = 0;
       this.specs.map((item,index)=>{
         if(item.id===this.temSpecId){
           stockNum = Number(item.stockNum);
@@ -162,11 +162,29 @@ export default {
       curIndex:0,
       rate:'',
       commentList:[],
-      goodsList:[]
+      goodsList:[],
+      orderList: {
+        goods: []
+      },
     }
   },
 
   methods:{
+    ...mapMutations({
+      add: 'CAR',
+    }),
+    getOrderState(state) {
+      getOrderByState(state, this.clientToken).then(res => {
+          console.log(res, "购物车数量");
+          this.orderList = res;
+          //解决购物车数量默认值报错
+          this.orderList.map((item, index) => {
+            item.temGoodsNum = item.goodsNum;
+          });
+        }).catch(e => {
+          console.log(e);
+        });
+    },
     changeIndex(i){
       this.curIndex = i;
     },
@@ -231,6 +249,7 @@ export default {
         alert('请先登录！');
         return;
       }
+      this.add(this.orderList.length+1);
       const res = addOrder({
         token:this.clientToken,
         goodsDetailId:this.temSpecId,
@@ -300,6 +319,7 @@ export default {
     this.getGoodsInfo(this.id);
     this.getGoodsMsg(this.id);
     this.getComment(this.id);
+    this.getOrderState(0);
   },
 
   watch:{

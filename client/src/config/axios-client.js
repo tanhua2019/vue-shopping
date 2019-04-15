@@ -1,6 +1,5 @@
 import axios from 'axios'
 import store from '../store'
-import * as types from '../store/mutation-types'
 import router from '../router/client'
 
 // axios 配置
