@@ -77,20 +77,16 @@ export default {
   		}
   	},
   	getNoReplyMsg(){
-  		const res = getNoReplyMsg();
-  		res.then((msgs)=>{
+  		getNoReplyMsg().then((msgs)=>{
   			this.noReplyMsgList = msgs;
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			// alert(e);
   		})
   	},
   	getRepliedMsg(){
-  		const res = getRepliedMsg();
-  		res.then((msgs)=>{
+  	  getRepliedMsg().then((msgs)=>{
   			this.repliedMsgList = msgs;
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
@@ -104,21 +100,22 @@ export default {
   	},
   	replyConfirm(){
   		const val = this.$refs.replyText.value;
-  		const res = reply({
+  		reply({
   			id:this.curMsgId,
   			content:val
-  		});
-  		res
-  		.then(()=>{
-  			alert('回复成功!');
+  		}).then(()=>{
+        this.$message({
+            message: "回复成功!",
+            type: "success",
+            duration: 1000
+        });
   			this.noReplyMsgList.map((item,index)=>{
   				if(item.id===this.curMsgId){
   					this.noReplyMsgList.splice(index,1);
   				}
   			});
   			this.closePopup();
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},

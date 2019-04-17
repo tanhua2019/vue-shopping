@@ -48,12 +48,9 @@ export default {
   },
   methods:{
   	changeTag(index){
-  		const res = getOrders(index-1);
-  		res
-  		.then((orders)=>{
+  		getOrders(index-1).then((orders)=>{
   			this.orderList = orders;
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
@@ -61,17 +58,18 @@ export default {
   		this.$router.push('/backstage/orders/'+id)
   	},
   	deleteOrder(id){
-  		const res = deleteOrder(id);
-  		res
-  		.then(()=>{
-  			alert('删除成功');
+  	 deleteOrder(id).then(()=>{
+        this.$message({
+            message: "删除成功!",
+            type: "success",
+            duration: 1000
+        });
   			this.orderList.map((item,index)=>{
   				if(item.id===id){
   					this.orderList.splice(index,1);
   				}
   			})
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	}

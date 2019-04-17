@@ -134,11 +134,7 @@ export default {
     },
     updatePwd() {
       if (this.newPwd !== this.confirmPwd) {
-        this.$message({
-          message: "两次输入的密码不一致！",
-          type: "success",
-          duration: 1000
-        });
+        this.$message.error('两次输入的密码不一致！');
         return;
       }
       updatePwd({

@@ -60,52 +60,22 @@ export default {
   },
   data () {
     return {
-      goodsList:[
-        // {
-        //   id:1,
-        //   img:'https://m.360buyimg.com/babel/jfs/t1/16503/5/8602/76278/5c77fb63Efecb3e43/21ff8417013011af.jpg',
-        //   name:"ddd",
-        //   price:120
-        // },
-        // {
-        //   id:2,
-        //   img:'https://m.360buyimg.com/babel/jfs/t1/16503/5/8602/76278/5c77fb63Efecb3e43/21ff8417013011af.jpg',
-        //   name:"ddd",
-        //   price:120
-        // },
-        // {
-        //   id:3,
-        //   img:'https://m.360buyimg.com/babel/jfs/t1/16503/5/8602/76278/5c77fb63Efecb3e43/21ff8417013011af.jpg',
-        //   name:"ddd",
-        //   price:120
-        // },
-        // {
-        //   id:4,
-        //   img:'https://m.360buyimg.com/babel/jfs/t1/16503/5/8602/76278/5c77fb63Efecb3e43/21ff8417013011af.jpg',
-        //   name:"ddd",
-        //   price:120
-        // },
-      ],
+      goodsList:[],
       sortMode:0,//0默认，1价格升序，2价格降序
     }
   },
-
   methods:{
     getGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
+      getGoodsList(typeId).then((data)=>{
         this.goodsList = data;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
     searchGoods(keyword){
-      const res = searchGoods(keyword);
-      res.then((data)=>{
+      searchGoods(keyword).then((data)=>{
         this.goodsList = data;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },

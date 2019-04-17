@@ -190,9 +190,7 @@ export default {
     },
 
     getGoodsInfo(id){
-      const res = getGoodsInfo(id);
-      res
-      .then((data)=>{
+      getGoodsInfo(id).then((data)=>{
         this.goodsImg = data.img;
         this.goodsName = data.name;
         this.goodsDesc = data.desc;
@@ -200,19 +198,15 @@ export default {
         this.typeId = data.typeId;
         this.temSpecId = data.specs[0].id;
         this.getTypeGoodsList(data.typeId);
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
 
     getGoodsMsg(id){
-      const res = getGoodsMsg(id);
-      res
-      .then((data)=>{
+      getGoodsMsg(id).then((data)=>{
         this.msgList=data
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -221,13 +215,11 @@ export default {
       if(this.askContent.trim().length<=0){
         return;
       }
-      const res = askGoodsMsg({
+      askGoodsMsg({
         token:this.clientToken,
         msg:this.askContent,
         goodsId:this.id,
-      });
-      res
-      .then(()=>{
+      }).then(()=>{
         let time = new Date();
         this.msgList.unshift({
           id:'new',
@@ -238,8 +230,7 @@ export default {
           reply:{}
         });
         this.askContent = '';
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -250,18 +241,15 @@ export default {
         return;
       }
       this.add(this.orderList.length+1);
-      const res = addOrder({
+      addOrder({
         token:this.clientToken,
         goodsDetailId:this.temSpecId,
         state:0,
         num:this.num,
         amount:this.goodsPrice
-      });
-      res
-      .then(()=>{
+      }).then(()=>{
         alert('加入购物车成功！请前往 个人中心->购物车 结算')
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -271,26 +259,21 @@ export default {
         alert('请先登录！');
         return;
       }
-      const res = addOrder({
+     addOrder({
         token:this.clientToken,
         goodsDetailId:this.temSpecId,
         num:this.num,
         state:1,
         amount:this.goodsPrice
-      });
-      res
-      .then(()=>{
+      }).then(()=>{
         alert('自动付款成功！请耐心等待包裹派送~')
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
 
     getComment(goodsId){
-      const res = getComment(goodsId);
-      res
-      .then((data)=>{
+      getComment(goodsId).then((data)=>{
         if(Object.keys(data).length<=0){
           this.rate = '';
           this.commentList = [];
@@ -298,18 +281,15 @@ export default {
         }
         this.rate = data.rate;
         this.commentList = data.commentList;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
 
     getTypeGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
+      getGoodsList(typeId).then((data)=>{
         this.goodsList = data;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },

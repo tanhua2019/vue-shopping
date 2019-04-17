@@ -14,7 +14,7 @@
         <span>交易操作</span>
       </div>
       <ul class="orderList">
-        <li v-for="(item,index) in orderList" :key="'order'+item.id">
+        <li v-for="(item,index) in orderList" :key="'order'+item.id+index">
           <div class="orderHeader">
             <span class="orderTime">{{item.createtime}}</span>
             <span class="orderId">{{'订单号：'+item.id}}</span>
@@ -42,8 +42,8 @@
       <div class="popupContent" slot="popupContent">
         <div class="scoreBox">
           <span class="tips">评分：</span>
-          <i 
-            class="iconfont icon-collection_fill" 
+          <i
+            class="iconfont icon-collection_fill"
             v-for="(item,index) in 5"
             :key="'star'+index"
             :style="{color:(index+1)<=curStar?'#f9bd4f':'white'}"
@@ -70,9 +70,7 @@ export default {
     Popup
   },
   computed:{
-    ...mapState([
-      'clientToken'
-    ]),
+    ...mapState(['clientToken']),
   },
   data () {
     return {
@@ -88,72 +86,71 @@ export default {
       comment:'',
     }
   },
-
+  mounted(){
+    this.getOrderByState(-1);
+  },
   methods:{
-    changeIndex(i){
-      this.curIndex = i;
+    changeIndex(index){
+      this.curIndex = index;
       this.getOrderByState(this.curIndex-1);
     },
-    navTo(route){
-      this.$router.push(route);
-    },
     getOrderByState(state){
-      const res = getOrderByState(state,this.clientToken);
-      res
-      .then((data)=>{
-        this.orderList=data
-      })
-      .catch((e)=>{
+      getOrderByState(state,this.clientToken).then(res=>{
+        console.log(res,'999');
+        this.orderList=res
+      }).catch((e)=>{
         alert(e);
       })
     },
     deleteOrder(orderId){
-      const res = deleteOrder(orderId);
-      res
-      .then(()=>{
-        alert('删除订单成功！');
+      deleteOrder(orderId).then(()=>{
+        this.$message({
+            message: "删除订单成功！",
+            type: "success",
+            duration: 1000
+        });
         this.orderList.map((item,index)=>{
           if(item.id===orderId){
             this.orderList.splice(index,1);
           }
         })
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
 
     confirmPay(orderId){
-      const res = pay(orderId);
-      res
-      .then(()=>{
-        alert('支付成功！');
+      pay(orderId).then(()=>{
+        this.$message({
+            message: "支付成功！",
+            type: "success",
+            duration: 1000
+        });
         this.orderList.map((item,index)=>{
           if(item.id===orderId){
             item.state = 1;
           }
         })
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
     confirmReceive(orderId){
-      const res = confirmReceive(orderId);
-      res
-      .then(()=>{
-        alert('确认收货成功！');
+      confirmReceive(orderId).then(()=>{
+        this.$message({
+            message: "确认收货成功！",
+            type: "success",
+            duration: 1000
+        });
         this.orderList.map((item,index)=>{
           if(item.id===orderId){
             item.state = 3;
           }
         })
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
-
     closePopup(){
       this.popupShow = false;
       this.curCommentGoodsId = '';
@@ -171,28 +168,29 @@ export default {
     },
     sendComment(){
       if(this.curStar<=0 || this.comment==''){
-        alert('评分和评价不能为空！');
+        this.$message.error('评分和评价不能为空！');
         return;
       }
-      const res = sendComment({
+      sendComment({
         token:this.clientToken,
         orderId:this.curOrderId,
         goodsId:this.curCommentGoodsId,
         goodsDetailId:this.curCommentGoodsDetailId,
         content:this.comment,
         score:this.curStar*20
-      });
-      res
-      .then(()=>{
-        alert('评价成功！');
+      }).then(()=>{
+        this.$message({
+            message: "评价成功！",
+            type: "success",
+            duration: 1000
+        });
         for(let order of this.orderList){
           if(order.id===this.curOrderId){
             order.hasComment = true;
           }
         }
         this.closePopup();
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -205,12 +203,12 @@ export default {
     confirmStar(star){
       this.curStar = star;
       this.hasClickStar = true;
-    }
+    },
+    navTo(route){
+      this.$router.push(route);
+    },
   },
 
-  mounted(){
-    this.getOrderByState(-1);
-  }
 }
 </script>
 

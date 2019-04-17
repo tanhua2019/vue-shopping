@@ -189,13 +189,11 @@ export default {
       this.navTo('/mall/show/goodsList/'+typeId+'/all');
     },
     getGoodsList(typeId){
-      const res = getGoodsList(typeId);
-      res.then((data)=>{
+      getGoodsList(typeId).then((data)=>{
         this.goodsList = data;
         console.log('eeeeeeeee');
         console.log(this.goodsList);
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -203,17 +201,14 @@ export default {
 
   mounted(){
     //获取数据
-    const res = getTypes();
-    res
-    .then((data)=>{
+    getTypes().then((data)=>{
       data.unshift({
         id:-1,
         name:'首页'
       });
       this.typeList = data;
       this.getGoodsList(-1);
-    })
-    .catch((e)=>{
+    }).catch((e)=>{
       alert(e);
     });
 

@@ -37,18 +37,15 @@ export default {
     login() {
       const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
-      const res = login({
+      login({
         account: account,
         pwd: pwd
-      });
-      res
-        .then(data => {
+      }).then(data => {
           this.setAdminName(data.name);
           this.setAdminToken(data.token);
           this.$router.push("/backstage");
-        })
-        .catch(e => {
-          alert("登录失败");
+        }).catch(e => {
+          this.$message.error('用户名或者密码错误!');
         });
     }
   }

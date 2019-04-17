@@ -73,7 +73,7 @@ export default {
     width: 980px;
     margin-left: 30px;
     overflow: hidden;
-    display: inline-block;  
+    display: inline-block;
     vertical-align: top;
   }
 }

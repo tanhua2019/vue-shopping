@@ -21,8 +21,8 @@
             </tr>
         </tbody>
     </table>
-  	
-    
+
+
   </div>
 </template>
 
@@ -38,36 +38,32 @@ export default {
   	}
   },
   mounted(){
-  	const res = getAllUser();
-  	res
-  	.then((users)=>{
+  	getAllUser().then((users)=>{
   		this.userList = users;
-  	})
-  	.catch((e)=>{
+  	}).catch((e)=>{
   		alert(e)
   	})
   },
   methods:{
   	deleteUser(id){
-  		const res = deleteUser(id);
-  		res
-  		.then(()=>{
-  			alert('删除成功');
+  	deleteUser(id).then(()=>{
+        this.$message({
+            message: "删除成功！",
+            type: "success",
+            duration: 1000
+        });
   			this.userList.map((item,index)=>{
   				if(item.id===id){
   					this.userList.splice(index,1);
   				}
   			})
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
   	searchUser(){
   		const val = this.$refs.input.value;
-  		const res = getSearchUser(val);
-  		res
-  		.then((data)=>{
+  		getSearchUser(val).then((data)=>{
   			this.userList = data;
   		})
   		.catch((e)=>{

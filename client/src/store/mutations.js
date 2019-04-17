@@ -1,4 +1,3 @@
-// import * as types from './mutation-types';
 import { setLocalItem } from '../util/util';
 export const SET_ADMIN_TOKEN = 'SET_ADMIN_TOKEN';
 export const SET_ADMIN_NAME = 'SET_ADMIN_NAME';

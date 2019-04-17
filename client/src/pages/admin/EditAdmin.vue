@@ -49,20 +49,21 @@ export default {
   		const oldPwd = this.oldPwd+'';
   		const newPwd = this.newPwd+'';
   		const confirmPwd = this.confirmPwd+'';
-  		const res = changePwd({
+  		changePwd({
   			adminToken,
   			oldPwd,
   			newPwd,
   			confirmPwd
-  		});
-  		res
-  		.then(()=>{
+  		}).then(()=>{
   			this.oldPwd = '';
   			this.newPwd = '';
-  			this.confirmPwd = '';
-  			alert('修改成功！');
-  		})
-  		.catch((e)=>{
+        this.confirmPwd = '';
+        this.$message({
+            message: "修改密码成功！",
+            type: "success",
+            duration: 1000
+        });
+  		}).catch((e)=>{
   			alert(e);
   		})
   	}

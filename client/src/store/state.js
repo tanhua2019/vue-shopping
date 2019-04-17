@@ -9,7 +9,7 @@ const state = {
   clientToken:getLocalItem('clientToken')?getLocalItem('clientToken'):null,
 
   //购物车数量
-  car:getLocalItem('car')?getLocalItem('car'):null, 
+  car:getLocalItem('car')?getLocalItem('car'):null,
 }
 
 export default state;

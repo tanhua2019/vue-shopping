@@ -18,7 +18,6 @@
         <input ref="signRecipient" type="text" placeholder="请输入收件人">
         <input ref="signAddress" type="text" placeholder="请输入地址">
         <input ref="signPhone" type="text" placeholder="请输入手机号">
-
         <button @click="signup">注册</button>
       </div>
     </div>
@@ -59,36 +58,30 @@ export default {
     login(){
       const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
-      const res = login({
+      login({
         account:account,
         pwd:pwd
-      });
-      res
-      .then((data)=>{
+      }).then((data)=>{
         this.setClientName(data.name);
         this.setClientToken(data.token);
         this.$router.push('/');
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e)
       })
     },
     signup(){
-      const res = signup({
+      signup({
         email:this.$refs.signEmail.value,
         nickname:this.$refs.signName.value,
         pwd:this.$refs.signPwd.value,
         recipient:this.$refs.signRecipient.value,
         address:this.$refs.signAddress.value,
         phone:this.$refs.signPhone.value,
-      });
-      res
-      .then((data)=>{
+      }).then((data)=>{
         this.setClientName(data.name);
         this.setClientToken(data.token);
         this.$router.push('/');
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e)
       })
     }

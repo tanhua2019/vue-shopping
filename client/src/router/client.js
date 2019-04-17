@@ -8,37 +8,34 @@ let router = new Router({
     {
       path: "/",
       redirect: "/mall"
-    }, {
+    },
+    {
       path: '/login',
       name: 'MallLogin',
       component: () => import('@/pages/client/MallLogin')
-    }, {
+    },
+    {
       path: '/mall',
       name: 'Mall',
       component: () => import('@/pages/client/Mall'),
-      redirect: '/mall/show',
+      redirect: '/mall/show/index',
       children: [
         {
-          path: 'show',
-          name: 'MallShow',
-          component: () => import('@/pages/client/MallShow'),
-          redirect: '/mall/show/index',
-          children: [
-            {
-              path: 'index',
-              name: 'MallIndex',
-              component: () => import('@/pages/client/MallIndex')
-            }, {
-              path: 'goodsList/:typeId/:keyword',
-              name: 'GoodsList',
-              component: () => import('@/pages/client/GoodsList')
-            },
-          ]
-        }, {
+          path: '/mall/show/index',
+          name: 'MallIndex',
+          component: () => import('@/pages/client/MallIndex')
+        },
+        {
+          path: '/mall/show/goodsList/:typeId/:keyword',
+          name: 'GoodsList',
+          component: () => import('@/pages/client/GoodsList')
+        },
+        {
           path: 'goods/:id',
           name: 'GoodsDetail',
           component: () => import('@/pages/client/GoodsDetail')
-        }, {
+        },
+        {
           path: 'personal',
           name: 'Personal',
           component: () => import('@/pages/client/Personal'),
@@ -51,14 +48,16 @@ let router = new Router({
               meta: {
                 requireLogin: true,
               },
-            }, {
+            },
+            {
               path: 'myData',
               name: 'MyData',
               component: () => import('@/pages/client/MyData'),
               meta: {
                 requireLogin: true,
               },
-            }, {
+            },
+            {
               path: 'myOrder',
               name: 'MyOrder',
               component: () => import('@/pages/client/MyOrder'),
@@ -69,7 +68,8 @@ let router = new Router({
           ]
         }
       ]
-    }, {
+    },
+    {
       path: '*',
       name: 'ErrorPage',
       component: () => import('@/pages/ErrorPage')

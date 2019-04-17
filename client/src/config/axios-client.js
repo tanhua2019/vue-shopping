@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '../store'
 import router from '../router/client'
+import QS from 'qs';
 
 // axios 配置
 axios.defaults.timeout = 5000;
@@ -40,4 +41,88 @@ axios.interceptors.response.use(
         return Promise.reject(error.response.data)
     });
 
-export default axios;
+/**
+ * get方法，对应get请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function get(url, params){
+  return new Promise((resolve, reject) =>{
+      axios.get(url, {
+          params: params
+      })
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+    })
+    .then((json)=>{
+      if(json.code===0){
+              resolve(json.data);
+          }else{
+              reject(json.message);
+          }
+    })
+    .catch((e)=>{
+      reject(e.toString())
+    })
+  });
+}
+/**
+* post方法，对应post请求
+* @param {String} url [请求的url地址]
+* @param {Object} params [请求时携带的参数]
+*/
+export function post(url, params) {
+  return new Promise((resolve, reject) => {
+      axios.post(url, QS.stringify(params))
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+    })
+    .then((json)=>{
+      if(json.code===0){
+              resolve(json.data);
+          }else{
+              reject(json.message);
+          }
+    })
+    .catch((e)=>{
+      reject(e.toString())
+    })
+  });
+}
+/**
+ * delete方法，对应get请求
+ * @param {String} url [请求的url地址]
+ * @param {Object} params [请求时携带的参数]
+ */
+export function deletes(url, params){
+  return new Promise((resolve, reject) =>{
+      axios.delete(url, {
+          params: params
+      })
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+    })
+    .then((json)=>{
+      if(json.code===0){
+              resolve();
+          }else{
+              reject(json.message);
+          }
+    })
+    .catch((e)=>{
+      reject(e.toString())
+    })
+  });
+}

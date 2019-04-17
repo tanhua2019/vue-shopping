@@ -62,22 +62,17 @@ export default {
   methods:{
   	changeTag(index){
   		this.curIndex = index;
-  		const res = getGoods(this.tags[index].id);
-  		res
-  		.then((goods)=>{
+  		getGoods(this.tags[index].id).then((goods)=>{
   			this.goodsList = goods;
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
   	getTypes(){
-  		const res = getTypes();
-  		res.then((data)=>{
+  		getTypes().then((data)=>{
   			this.tags = data;
   			this.changeTag(this.curIndex);
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
@@ -89,16 +84,17 @@ export default {
   	},
   	addConfirm(){
   		const val = this.$refs.typeInput.value;
-  		const res = addType({
+  		addType({
   			name:val
-  		});
-  		res
-  		.then(()=>{
-  			alert('添加成功!');
+  		}).then(()=>{
+        this.$message({
+            message: "添加成功!",
+            type: "success",
+            duration: 1000
+        });
   			this.getTypes();
   			this.closePopup();
-  		})
-  		.catch((e)=>{
+  		}).catch((e)=>{
   			alert(e);
   		})
   	},
@@ -106,16 +102,13 @@ export default {
   		this.$router.push(route);
   	},
     deleteGoods(id){
-      const res = deleteGoods(id);
-      res
-      .then(()=>{
+      deleteGoods(id).then(()=>{
         this.goodsList.map((item,index)=>{
           if(item.id===id){
             this.goodsList.splice(index,1)
           }
         })
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },

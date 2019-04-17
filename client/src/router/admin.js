@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store';
-
 Vue.use(Router)
 
 let router = new Router({
@@ -9,11 +8,13 @@ let router = new Router({
     {
       path: "/",
       redirect: "/login"
-    }, {
+    },
+    {
       path: '/login',
       name: 'AdminLogin',
       component: () => import('@/pages/admin/AdminLogin')
-    }, {
+    },
+    {
       path: '/backstage',
       name: 'Backstage',
       redirect: "/backstage/editUser",
@@ -26,42 +27,48 @@ let router = new Router({
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+         {
           path: 'editAdmin',
           name: 'EditAdmin',
           component: () => import('@/pages/admin/EditAdmin'),
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+        {
           path: 'goods',
           name: 'Goods',
           component: () => import('@/pages/admin/Goods'),
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+        {
           path: 'goods/:id',
           name: 'EditGoods',
           component: () => import('@/pages/admin/EditGoods'),
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+        {
           path: 'orders',
           name: 'Orders',
           component: () => import('@/pages/admin/Orders'),
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+         {
           path: 'orders/:id',
           name: 'EditOrders',
           component: () => import('@/pages/admin/EditOrders'),
           meta: {
             requireLogin: true,
           },
-        }, {
+        },
+        {
           path: 'messages',
           name: 'Messages',
           component: () => import('@/pages/admin/Messages'),
@@ -70,7 +77,7 @@ let router = new Router({
           },
         }
       ]
-    }, {//404页面
+    }, {
       path: '*',
       name: 'ErrorPage',
       component: () => import('@/pages/ErrorPage')

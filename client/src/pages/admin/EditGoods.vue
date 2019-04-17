@@ -83,12 +83,9 @@ export default {
   },
   methods:{
     getTypes(){
-      const res = getTypes();
-      res
-      .then((data)=>{
+      getTypes().then((data)=>{
         this.types = data;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e)
       })
     },
@@ -97,34 +94,36 @@ export default {
     },
     saveChange(){
       if(this.id==='new'){
-        const res = addGoods({
+        addGoods({
           name:this.goodsName,
           typeId:this.temTypeId,
           img:this.goodsImg,
           desc:this.desc,
           specList:this.specList
+        }).then(()=>{
+          this.$message({
+            message: "创建商品成功！",
+            type: "success",
+            duration: 1000
         });
-        res
-        .then(()=>{
-          alert('创建商品成功！')
-        })
-        .catch((e)=>{
+        }).catch((e)=>{
           alert(e);
         })
       }else{
-        const res = updateGoods({
+         updateGoods({
           id:this.id,
           name:this.goodsName,
           typeId:this.temTypeId,
           img:this.goodsImg,
           desc:this.desc,
           specList:this.specList
+        }).then(()=>{
+          this.$message({
+            message: "修改成功！",
+            type: "success",
+            duration: 1000
         });
-        res
-        .then(()=>{
-          alert('修改成功！')
-        })
-        .catch((e)=>{
+        }).catch((e)=>{
           alert(e);
         })
       }
@@ -144,17 +143,15 @@ export default {
         });
         this.closePopup();
       }else{
-        const res = addSpec({
+         addSpec({
           goodsId:this.id,
           specName:this.$refs.specNameInput.value,
           stockNum:this.$refs.stockNumInput.value,
           unitPrice:this.$refs.priceInput.value,
-        });
-        res.then((spec)=>{
+        }).then((spec)=>{
           this.specList.push(spec);
           this.closePopup();
-        })
-        .catch((e)=>{
+        }).catch((e)=>{
           alert(e);
         })
       }
@@ -170,19 +167,16 @@ export default {
           }
         })
       }else{
-        const res = deleteSpec({
+        deleteSpec({
           goodsId:this.id,
           specName:specname
-        });
-        res
-        .then(()=>{
+        }).then(()=>{
           this.specList.map((item,index)=>{
             if(item.specName===specname){
               this.specList.splice(index,1);
             }
           })
-        })
-        .catch((e)=>{
+        }).catch((e)=>{
           alert(e);
         })
       }
@@ -194,17 +188,14 @@ export default {
     if(this.id==='new'){
 
     }else{
-      const res = getGoodsInfo(this.id);
-      res
-      .then((data)=>{
+      getGoodsInfo(this.id).then((data)=>{
         this.temTypeId = data.goods.typeId;
         this.initTypeId = data.goods.typeId;
         this.goodsName = data.goods.name;
         this.goodsImg = data.goods.img;
         this.desc = data.goods.desc;
         this.specList = data.specs;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     }

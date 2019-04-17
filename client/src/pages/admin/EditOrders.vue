@@ -77,9 +77,7 @@ export default {
   },
   methods:{
     fetchOrderDetail(id){
-      const res = getAOrder(id);
-      res
-      .then((order)=>{
+      getAOrder(id).then((order)=>{
         this.goods = order.goods;
         this.spec = order.spec;
         this.states = order.states;
@@ -88,8 +86,7 @@ export default {
         this.temSpecId = order.curSpec.id;
         this.temNum = Number(order.num);
         this.temStateId = order.curState.id;
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     },
@@ -99,18 +96,19 @@ export default {
     },
 
     saveChange(){
-      const res = changeOrder({
+      changeOrder({
         id:this.$route.params.id,
         state:this.temStateId,
         spec:this.temSpecId,
         num:this.temNum
-      });
-      res
-      .then(()=>{
-        alert('修改成功');
+      }).then(()=>{
+        this.$message({
+            message: "修改成功！",
+            type: "success",
+            duration: 1000
+        });
         this.fetchOrderDetail(this.$route.params.id);
-      })
-      .catch((e)=>{
+      }).catch((e)=>{
         alert(e);
       })
     }

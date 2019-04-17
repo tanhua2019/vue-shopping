@@ -1,7 +1,7 @@
 <template>
   <div class="MallShow">
-    <FixedNav v-show="navShouldFixed">
-      <div slot="navContent" class="container fixedNavContainer">
+    <div class="FixedNav" v-show="navShouldFixed" :style="{width:width}">
+      <div class="container fixedNavContainer">
         <h3 class="fixedLeft" @click="navTo('/mall/show/index')">严选商城</h3>
         <ul class="fixedRight">
           <li
@@ -12,7 +12,7 @@
           >{{item.name}}</li>
         </ul>
       </div>
-    </FixedNav>
+    </div>
     <div class="logo">
       <img src="http://yanxuan.nosdn.127.net/606d02b8d3f40a7496cad463e79f128a.gif">
       <div class="searchBox">
@@ -51,21 +51,16 @@
         @click="selectType(item.id)"
       >{{item.name}}</li>
     </ul>
-    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { getTypes, getGoodsList, getOrderByState } from "../../api/client";
-import FixedNav from "../../components/FixedNav";
+import {getClientSize} from '../util/util';
+import { getTypes, getGoodsList, getOrderByState } from "../api/client";
 import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "MallShow",
-  components: {
-    // TipsInput,
-    FixedNav
-  },
   computed: {
     ...mapState(["car", "clientToken"]),
     curPath() {
@@ -74,6 +69,7 @@ export default {
   },
   data() {
     return {
+      width: '',
       token: false,
       orderList: {
         goods: []
@@ -108,8 +104,7 @@ export default {
       });
     },
     getGoodsList(typeId) {
-      const res = getGoodsList(typeId);
-      res
+      getGoodsList(typeId)
         .then(data => {
           console.log("9999");
           this.searchList = data;
@@ -150,7 +145,7 @@ export default {
     },
     searchConfirm() {
       if (this.searchText.trim().length <= 0) {
-        alert("输入不能为空！");
+        this.$message.error("输入不能为空！");
         return;
       }
       this.navTo(`/mall/show/goodsList/0/${this.searchText}`);
@@ -185,9 +180,7 @@ export default {
 
   mounted() {
     this.getOrderState(0); //获取数据
-    // this.showCars();
-    const res = getTypes();
-    res
+    getTypes()
       .then(data => {
         data.unshift({
           id: -1,
@@ -199,9 +192,9 @@ export default {
       .catch(e => {
         alert(e);
       });
-
     //监听滚动事件
     document.addEventListener("scroll", this.scrollHandle, false);
+    this.width = getClientSize().width+'px';
   },
 
   destroyed() {
@@ -216,9 +209,27 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
+@import "../assets/css/var.less";
 .MallShow {
   width: 100%;
+  .FixedNav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 64px;
+    background-color: white;
+    border-bottom: 1px solid @borderColor;
+    animation: slideIn 0.3s;
+    z-index: 10000;
+  }
+  @keyframes slideIn {
+    from {
+      top: -64px;
+    }
+    to {
+      top: 0px;
+    }
+  }
   .logo {
     height: 150px;
     display: flex;
