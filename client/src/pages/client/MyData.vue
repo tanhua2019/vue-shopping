@@ -100,9 +100,7 @@ export default {
     ...mapState(["clientToken"])
   },
   methods: {
-    ...mapMutations({
-      setClientName: "SET_CLIENT_NAME"
-    }),
+    ...mapMutations(['setclientName']),
     updateUserData() {
       console.log(this.headimg, "9999");
       updateUserData({
@@ -119,7 +117,7 @@ export default {
             type: "success",
             duration: 1000
           });
-          this.setClientName(this.nickname);
+          this.setclientName(this.nickname);
         })
         .catch(e => {
           alert(e);

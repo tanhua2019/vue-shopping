@@ -30,10 +30,7 @@ export default {
     return {};
   },
   methods: {
-    ...mapMutations({
-      setAdminName: "SET_ADMIN_NAME",
-      setAdminToken: "SET_ADMIN_TOKEN"
-    }),
+    ...mapMutations(['setadminName','setadminToken']),
     login() {
       const account = this.$refs.account.value;
       const pwd = this.$refs.pwd.value;
@@ -41,8 +38,8 @@ export default {
         account: account,
         pwd: pwd
       }).then(data => {
-          this.setAdminName(data.name);
-          this.setAdminToken(data.token);
+          this.setadminName(data.name);
+          this.setadminToken(data.token);
           this.$router.push("/backstage");
         }).catch(e => {
           this.$message.error('用户名或者密码错误!');

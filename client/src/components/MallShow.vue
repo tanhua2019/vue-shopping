@@ -89,9 +89,7 @@ export default {
     this.cars();
   },
   methods: {
-    ...mapMutations({
-      showCar: "SHOWCAR"
-    }),
+    ...mapMutations(['showCar']),
     cars() {
       if (this.clientToken) {
         this.token = true;

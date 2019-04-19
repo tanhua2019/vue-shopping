@@ -74,13 +74,7 @@ export default {
     this.getOrderState(0);
   },
   methods: {
-    ...mapMutations({
-      del: 'DELETE',
-    }),
-    ...mapMutations({
-      setClientName: 'SET_CLIENT_NAME',
-      setClientToken: 'SET_CLIENT_TOKEN'
-    }),
+    ...mapMutations(['deleteCar']),
     //购物车
     getOrderState(state) {
       getOrderByState(state, this.clientToken).then(res => {
@@ -106,7 +100,7 @@ export default {
     //删除订单
     deleteOrde(orderId) {
       // console.log("000");
-      this.del(this.orderList.length-1);
+      this.deleteCar(this.orderList.length-1);
       deleteOrder(orderId).then(res => {
           this.$message({
             message: "删除订单成功！",

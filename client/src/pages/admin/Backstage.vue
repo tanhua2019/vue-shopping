@@ -51,9 +51,7 @@ export default {
     },
   },
   methods:{
-    ...mapMutations({
-      adminLogout: 'ADMIN_LOGOUT',
-    }),
+    ...mapMutations(['adminLogout']),
     showUserTips(){
       this.userTipsShow = true;
     },

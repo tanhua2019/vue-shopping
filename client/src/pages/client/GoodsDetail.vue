@@ -170,9 +170,7 @@ export default {
   },
 
   methods:{
-    ...mapMutations({
-      add: 'CAR',
-    }),
+    ...mapMutations(['addCar']),
     getOrderState(state) {
       getOrderByState(state, this.clientToken).then(res => {
           console.log(res, "购物车数量");
@@ -240,7 +238,7 @@ export default {
         alert('请先登录！');
         return;
       }
-      this.add(this.orderList.length+1);
+      this.addCar(this.orderList.length+1);
       addOrder({
         token:this.clientToken,
         goodsDetailId:this.temSpecId,

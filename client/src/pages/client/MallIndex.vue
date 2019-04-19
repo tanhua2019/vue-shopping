@@ -211,7 +211,6 @@ export default {
     }).catch((e)=>{
       alert(e);
     });
-
     //记录打开网页再加四小时的时间
     this.initTimestamp = new Date().getTime()+(4*60*60*1000);
     this.timer = setInterval(()=>{

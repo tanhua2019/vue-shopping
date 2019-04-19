@@ -1,26 +1,24 @@
 <template>
   <div class="Mall">
-    <header>
-      <div class="container clear">
-        <span class="title" @click="navTo('/mall')">严选购物商城</span>
-        <NoticeList :notices="notices"/>
-        <div class="right" v-if="clientToken">
-          <span class="name">欢迎您，{{clientName}}</span>
-          <span @click="navTo('/mall/personal')">个人中心</span>
-          <span @click="logout">退出登录</span>
-        </div>
-        <div class="right" v-else>
-          <span @click="navTo('/login')">登录</span>
-          <span @click="navTo('/login')">注册</span>
-        </div>
+    <div class="navBar">
+      <div class="title" @click="navTo('/mall')">购物商城</div>
+      <Notice :notices="notices"></Notice>
+      <div class="right" v-if="clientToken">
+        <span>欢迎您，{{clientName}}</span>
+        <span @click="navTo('/mall/personal')">个人中心</span>
+        <span @click="logout">退出登陆</span>
       </div>
-    </header>
-    <div class="content" :style="{minHeight:clientHeight+'px'}">
+      <div class="right" v-else>
+        <span @click="navTo('/login')">登陆</span>
+        <span @click="navTo('/login')">注册</span>
+      </div>
+    </div>
+    <div class="content">
       <div class="container">
         <MallShow></MallShow>
         <router-view></router-view>
       </div>
-      <div class="fixedAd" v-show="shouldShowBT">
+      <div class="fixedAd" v-show="isShow">
         <img src="../../assets/img/nav.gif" alt>
         <ul class="fixedList">
           <li>
@@ -111,8 +109,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import NoticeList from "../../components/NoticeList";
-import { getClientSize, backToTop } from "../../util/util";
+import Notice from "../../components/Notice";
 import MallShow from "../../components/MallShow";
 
 export default {
@@ -121,21 +118,18 @@ export default {
     ...mapState(["clientToken", "clientName"])
   },
   components: {
-    NoticeList,
+    Notice,
     MallShow
   },
   data() {
     return {
       notices: ["随机立减 最高减99元！", "领1000元APP新人礼"],
-      clientHeight: getClientSize().height,
-      shouldShowBT: false
+      isShow: false
     };
   },
 
   methods: {
-    ...mapMutations({
-      clientLogout: "CLIENT_LOGOUT"
-    }),
+    ...mapMutations(["clientLogout"]),
     navTo(route) {
       this.$router.push(route);
     },
@@ -144,22 +138,26 @@ export default {
       this.$router.go(0);
     },
     backToTop() {
-      backToTop();
+      let scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 0) {
+        window.requestAnimationFrame(this.backToTop);
+        window.scrollTo(0, scrollTop - scrollTop / 10);
+      }
     },
     watchScrollTop() {
       let scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       if (scrollTop > 600 && scrollTop < 3700) {
-        this.shouldShowBT = true;
+        this.isShow = true;
       } else {
-        this.shouldShowBT = false;
+        this.isShow = false;
       }
     }
   },
   mounted() {
     document.addEventListener("scroll", this.watchScrollTop, false);
   },
-
   beforeDestroyed() {
     document.removeEventListener("scroll", this.watchScrollTop, false);
   }
@@ -170,55 +168,30 @@ export default {
 @import "../../assets/css/var.less";
 .Mall {
   width: 100%;
-  header {
+  .navBar {
     width: 100%;
-    background-color: #333333;
-    height: 38px;
-    color: @fontShallowColor;
-    user-select: none;
-    z-index: 10000;
-    position: absolute;
-    left: 0;
-    top: 0;
-    .container {
-      position: relative;
-      height: 38px;
-      .title {
-        position: absolute;
-        left: 0;
-        display: inline-block;
-        height: 26px;
-        top: 50%;
-        margin-top: -13px;
-        line-height: 26px;
-        font-size: 14px;
+    height: 50px;
+    background: #333;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    .title {
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      flex: 1;
+    }
+    .right {
+      display: flex;
+      justify-content: flex-end;
+      flex: 2;
+      padding-right: 50px;
+      span {
+        padding: 0 10px;
         cursor: pointer;
       }
-      .NoticeListBox {
-        position: absolute;
-        left: 200px;
-      }
-      .right {
-        position: absolute;
-        right: 0;
-        display: inline-block;
-        height: 26px;
-        top: 50%;
-        margin-top: -13px;
-        line-height: 26px;
-        font-size: 14px;
-        span {
-          margin-left: 20px;
-          cursor: pointer;
-        }
-        .name {
-          cursor: default;
-        }
-      }
     }
-  }
-  .content {
-    padding-top: 40px;
   }
   .fixedAd {
     position: fixed;
