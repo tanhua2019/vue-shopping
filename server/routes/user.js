@@ -16,6 +16,9 @@ router.post('/api/user/updateUserData', user.updateUserData);
 //更改用户密码
 router.post('/api/user/updatePwd', user.updatePwd);
 
+//更改用户密码
+router.post('/api/user/updatehead', user.updatehead);
+
 /*
 //修改昵称
 router.post('/privateApi/user/setNickname',user.setNickname);

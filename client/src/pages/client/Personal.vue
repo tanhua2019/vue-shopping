@@ -3,7 +3,7 @@
     <ul class="titleList">
       <li :class="{selected:curPath==='/mall/personal/cart'}" @click="navTo('/mall/personal/cart')">购物车</li>
       <li :class="{selected:curPath==='/mall/personal/myOrder'}" @click="navTo('/mall/personal/myOrder')">我的订单</li>
-      <li :class="{selected:curPath==='/mall/personal/myData'}" @click="navTo('/mall/personal/myData')">修改资料</li>
+      <li :class="{selected:curPath==='/mall/personal/personInfo'}" @click="navTo('/mall/personal/personInfo')">修改资料</li>
     </ul>
     <div class="content">
       <router-view></router-view>

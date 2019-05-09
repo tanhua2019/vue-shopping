@@ -142,10 +142,10 @@ exports.getData = async (ctx)=>{
 //更改用户资料
 exports.updateUserData = async (ctx)=>{
   const data = ctx.request.body;
-  
   try{
     const res = await UserModel.update(
       {
+        headimg: data.headimg,
         recipient:data.recipient,
         address:data.address,
         phone:data.phone,
@@ -171,11 +171,9 @@ exports.updateUserData = async (ctx)=>{
   }
 }
 
-
 //修改密码
 exports.updatePwd = async (ctx)=>{
   const data = ctx.request.body;
-  
   const account = await UserModel.findOne({
       where: {
         id: data.id

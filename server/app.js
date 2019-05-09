@@ -4,13 +4,13 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+
 const jwt = require('koa-jwt');
 const cors = require('koa2-cors');
 
 const mall = require('./routes/mall');
 const user = require('./routes/user');
 const admin = require('./routes/admin');
-
 // error handler
 onerror(app);
 

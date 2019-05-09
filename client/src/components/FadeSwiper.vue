@@ -27,6 +27,7 @@ export default {
     },
   },
   computed:{
+
   },
   data(){
     return{
@@ -63,6 +64,8 @@ export default {
   },
   mounted(){
     console.log(this.len,'0000');
+    console.log(this.width,'0000');
+    console.log(this.height,'0000');
     this.setTimer();
   },
   beforeDestroyed(){
@@ -108,7 +111,7 @@ export default {
     vertical-align: middle;
     background-color: @thirdColor;
     border-radius: 50%;
-    text-align: center;
+    text-align: center; 
     cursor: pointer;
     opacity: 0.7;
     &:hover{

@@ -50,9 +50,9 @@ let router = new Router({
               },
             },
             {
-              path: 'myData',
-              name: 'MyData',
-              component: () => import('@/pages/client/MyData'),
+              path: 'personInfo',
+              name: 'PersonInfo',
+              component: () => import('@/pages/client/personInfo'),
               meta: {
                 requireLogin: true,
               },
