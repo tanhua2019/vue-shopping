@@ -27,63 +27,6 @@
         </ul>
       </Slick>
     </section>
-    <section class="flashSale section">
-      <SectionHeader title="限时购" tips="抢抢抢，好货不等人" moreText="更多抢购>"/>
-      <div class="content">
-        <div class="left">
-          <p class="title">特价场</p>
-          <hr/>
-          <p class="tips">距离结束还剩</p>
-          <div class="countBox">
-            <span class="time">{{h}}</span>
-            <span>:</span>
-            <span class="time">{{m}}</span>
-            <span>:</span>
-            <span class="time">{{s}}</span>
-          </div>
-          <div class="allBtn">查看全部 ></div>
-        </div><ul class="right"><li v-for="(item,index) in goodsList.slice(0,4)" :key="index">
-            <img class="leftImg" :src="item.img" />
-            <div class="rightBox">
-              <p class="goodsName ellipsis" @click="navTo('/mall/goods/'+item.id)">{{item.name}}</p>
-              <div class="less">
-                <span class="lessBar"></span>
-                <span class="lessNum">还剩86件</span>
-              </div>
-              <div class="price">
-                <span class="nowPrice">限时价¥{{item.price}}</span>
-                <span class="beforePrice">原价¥{{item.price+60}}</span>
-              </div>
-              <div class="buyBtn" @click="navTo('/mall/goods/'+item.id)">立即抢购</div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
-    <section class="hotGoods section">
-      <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
-      <div class="content">
-        <ul class="left">
-          <GoodsItem
-            :id="goodsList[0].id"
-            :img="goodsList[0].img"
-            :name="goodsList[0].name"
-            :price="goodsList[0].price"
-          />
-        </ul>
-        <ul class="right">
-           <GoodsItem
-            v-for="(item,index) in goodsList.slice(3,9)"
-            :style="{marginBottom: index<=2?'10px':'0px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-        </ul>
-      </div>
-    </section>
     <section class="maker section">
       <SectionHeader title="品牌制造商" tips="工厂直达消费者，剔除品牌溢价" moreText="更多制造商>"/>
       <div class="content">
@@ -118,20 +61,6 @@
           </ZoomImg>
         </div>
       </div>
-    </section>
-    <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="index">
-      <SectionHeader :title="item.name" tips="" moreText="查看更多>" @click.native="selectType(item.id)"/>
-      <ul class="content">
-          <GoodsItem
-            v-for="(item,index) in filterGoodsByType(item.id).slice(0,4)"
-            :style="{marginRight: (index+1)%4===0?'0px':'25px'}"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />
-      </ul>
     </section>
   </div>
 </template>

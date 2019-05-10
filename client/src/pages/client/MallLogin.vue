@@ -152,7 +152,6 @@ export default {
 }
 </style>
 
-
 <style lang="less">
 .LoginBox {
   .inputBoxContent {

@@ -1,8 +1,8 @@
 <template>
   <div class="Personal">
     <ul class="titleList">
-      <li :class="{selected:curPath==='/mall/personal/cart'}" @click="navTo('/mall/personal/cart')">购物车</li>
-      <li :class="{selected:curPath==='/mall/personal/myOrder'}" @click="navTo('/mall/personal/myOrder')">我的订单</li>
+      <li :class="{selected:curPath==='/mall/personal/personCart'}" @click="navTo('/mall/personal/personCart')">购物车</li>
+      <li :class="{selected:curPath==='/mall/personal/personOrder'}" @click="navTo('/mall/personal/personOrder')" >我的订单</li>
       <li :class="{selected:curPath==='/mall/personal/personInfo'}" @click="navTo('/mall/personal/personInfo')">修改资料</li>
     </ul>
     <div class="content">
@@ -12,64 +12,51 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
-  name: 'Personal',
-  computed:{
-    ...mapState([
-      'clientToken',
-      'clientName'
-    ]),
-  },
-  data () {
+  name: "",
+  data() {
     return {
-      curPath:this.$route.path
+      curPath: this.$route.path
+    };
+  },
+  watch: {
+    $route(to, from) {
+      this.curPath = to.path;
     }
   },
-
-  methods:{
-    navTo(route){
-      this.$router.push(route)
-    },
-  },
-
-  mounted(){
-  },
-
-  watch:{
-    '$route'(to,from){
-        this.curPath = to.path;
+  methods: {
+    navTo(route) {
+      this.$router.push(route);
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
 @import "../../assets/css/var.less";
-.Personal{
+.Personal {
   padding-top: 20px;
-  .titleList{
+  .titleList {
     width: 180px;
-    border:1px solid @borderColor;
+    border: 1px solid @borderColor;
     padding: 20px 0;
     display: inline-block;
     overflow: hidden;
-    li{
+    li {
       width: 100%;
       margin: 20px 0;
       padding-left: 30px;
-      color:@fontDefaultColor;
+      color: @fontDefaultColor;
       font-size: 15px;
       cursor: pointer;
       border-left: 2px solid transparent;
     }
-    .selected{
+    .selected {
       border-left: 2px solid @thirdColor;
-      color:@thirdColor;
+      color: @thirdColor;
     }
   }
-  .content{
+  .content {
     width: 980px;
     margin-left: 30px;
     overflow: hidden;

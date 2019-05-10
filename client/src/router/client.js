@@ -39,12 +39,12 @@ let router = new Router({
           path: 'personal',
           name: 'Personal',
           component: () => import('@/pages/client/Personal'),
-          redirect: '/mall/personal/cart',
+          redirect: '/mall/personal/personcart',
           children: [
             {
-              path: 'cart',
-              name: 'Cart',
-              component: () => import('@/pages/client/Cart'),
+              path: 'personcart',
+              name: 'PersonCart',
+              component: () => import('@/pages/client/PersonCart'),
               meta: {
                 requireLogin: true,
               },
@@ -58,9 +58,9 @@ let router = new Router({
               },
             },
             {
-              path: 'myOrder',
-              name: 'MyOrder',
-              component: () => import('@/pages/client/MyOrder'),
+              path: 'personOrder',
+              name: 'PersonOrder',
+              component: () => import('@/pages/client/personOrder'),
               meta: {
                 requireLogin: true,
               },
@@ -71,8 +71,8 @@ let router = new Router({
     },
     {
       path: '*',
-      name: 'ErrorPage',
-      component: () => import('@/pages/ErrorPage')
+      name: 'Error',
+      component: () => import('@/pages/Error')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

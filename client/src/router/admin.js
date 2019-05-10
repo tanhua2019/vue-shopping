@@ -79,8 +79,8 @@ let router = new Router({
       ]
     }, {
       path: '*',
-      name: 'ErrorPage',
-      component: () => import('@/pages/ErrorPage')
+      name: 'Error',
+      component: () => import('@/pages/Error')
     }
   ],
   scrollBehavior(to, from, savedPosition) {

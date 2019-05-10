@@ -34,7 +34,7 @@
           <p>搜索</p>
         </div>
       </div>
-      <div class="car" v-show="token" @click="navTo('/mall/personal/cart')">
+      <div class="car" v-show="token" @click="navTo('/mall/personal/personCart')">
         <i class="el-icon-goods">
           <span>购物车</span>
           <span class="cars">
