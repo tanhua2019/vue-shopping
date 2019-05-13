@@ -61,14 +61,6 @@ let router = new Router({
           },
         },
         {
-          path: 'orders/:id',
-          name: 'EditOrders',
-          component: () => import('@/pages/admin/EditOrders'),
-          meta: {
-            requireLogin: true,
-          },
-        },
-        {
           path: 'messages',
           name: 'Messages',
           component: () => import('@/pages/admin/Messages'),

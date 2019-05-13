@@ -98,7 +98,7 @@ export default {
     justify-content: space-between;
     margin-bottom: 20px;
     .el-button {
-      width: 160px;
+      width: 200px;
       height: 40px;
     }
     .active {
