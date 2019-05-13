@@ -1,145 +1,112 @@
 <template>
-  <div class="Goods">
-    <header class="clear">
-  		<span>商品管理</span>
-  		<button @click="addType">添加类目</button>
-  	</header>
-  	<Tag :tagList="tagTextList" @indexChange="changeTag"/>
-  	<div class="content">
+  <div class="goodsBox">
+    <div class="goodsHead">
+      <span>用户管理</span>
+      <el-button type="primary">添加分类</el-button>
+    </div>
+    <div class="buttonBox">
+      <el-button
+        size="small"
+        v-for="(item,index) in buttonTag"
+        :key="index"
+        :class="{active:index == isActive}"
+        @click="changeTab(index)"
+        v-waves
+      >{{item}}</el-button>
+    </div>
+    <div class="content">
   		<ul class="clear">
-  			<li v-for="(item,index) in goodsList" :key="'goods'+item.id">
+  			<li v-for="item in goodsList" :key="'goods'+item.id">
   				<img :src="item.img" alt="" />
   				<span>{{item.name}}</span>
   				<div>
-  					<button class="normalBtn" @click="navTo('/backstage/goods/'+item.id)">编辑</button>
+  					<button class="normalBtn" @click="navTo('/backHome/goods/'+item.id)">编辑</button>
   					<button @click="deleteGoods(item.id)" class="deleteBtn">删除</button>
   				</div>
   			</li>
   			<li>
-  				<div class="addGoods" @click="navTo('/backstage/goods/new')">
+  				<div class="addGoods" @click="navTo('/backHome/goods/new')">
   					<div>+</div>
   					点击增加商品
   				</div>
   			</li>
   		</ul>
   	</div>
-  	<Popup title="增加类目" @popupClose="closePopup" v-show="popupShow">
-  		<div class="popupContent" slot="popupContent">
-  			<input type="text" ref="typeInput" placeholder="请输入类目名称" />
-  			<button @click="addConfirm">确认</button>
-  		</div>
-  	</Popup>
   </div>
 </template>
 
 <script>
-import {getGoods,getTypes,addType,deleteGoods} from '../../api/admin';
-import Tag from '../../components/Tag';
-import Popup from '../../components/Popup';
+import waves from "@/directive/waves";
+import { getGoods, getTypes, addType, deleteGoods } from "../../api/admin";
 export default {
-  name: 'Goods',
-  components:{
-  	Tag,
-  	Popup
+  name: "",
+  directives: {
+    waves
   },
-  computed:{
-  	tagTextList(){
-  		let temArr = [];
-  		this.tags.map((item,index)=>{
-  			temArr.push(item.name)
-  		});
-  		return temArr;
-  	}
+  data() {
+    return {
+      Tag: [],
+      buttonTag: [],
+      isActive: 0,
+      goodsList: []
+    };
   },
-  data(){
-  	return{
-  		tags:[],
-  		goodsList:[],
-  		popupShow:false,
-  		curIndex:0
-  	}
+  mounted() {
+    this.getTypes();
+    this.changeTab(0);
   },
-  methods:{
-  	changeTag(index){
-  		this.curIndex = index;
-  		getGoods(this.tags[index].id).then((goods)=>{
-  			this.goodsList = goods;
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	getTypes(){
-  		getTypes().then((data)=>{
-  			this.tags = data;
-  			this.changeTag(this.curIndex);
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	addType(){
-  		this.popupShow = true;
-  	},
-  	closePopup(){
-  		this.popupShow = false;
-  	},
-  	addConfirm(){
-  		const val = this.$refs.typeInput.value;
-  		addType({
-  			name:val
-  		}).then(()=>{
-        this.$message({
-            message: "添加成功!",
-            type: "success",
-            duration: 1000
+  methods: {
+    getTypes() {
+      getTypes().then(res => {
+        console.log(res);
+        this.Tag = res;
+        this.Tag.map(item => {
+          this.buttonTag.push(item.name);
         });
-  			this.getTypes();
-  			this.closePopup();
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	navTo(route){
-  		this.$router.push(route);
-  	},
-    deleteGoods(id){
-      deleteGoods(id).then(()=>{
-        this.goodsList.map((item,index)=>{
-          if(item.id===id){
-            this.goodsList.splice(index,1)
-          }
-        })
-      }).catch((e)=>{
-        alert(e);
-      })
+        this.changeTab(0);
+      });
     },
-  },
-  mounted(){
-  	this.getTypes();
+    changeTab(index) {
+      this.isActive = index;
+      getGoods(this.Tag[index].id).then(res => {
+        console.log(this.goodsList);
+        this.goodsList = res;
+      });
+    }
   }
-}
+};
 </script>
 
-<style scoped lang="less">
-@import "../../assets/css/var.less";
-.Goods{
-	header{
-		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		span{
-			float: left;
-		}
-		button{
-			float: right;
-			background-color: #337da4;
-			color:white;
-			border: none;
-			width: 80px;
-			height: 30px;
-			border-radius: 5px;
-		}
-	}
-	.content{
+<style lang='less' scoped>
+.goodsBox {
+  .goodsHead {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    .el-input {
+      width: 200px;
+    }
+  }
+  .buttonBox {
+    width: 100%;
+    padding: 0 5%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .el-button {
+      width: 160px;
+      height: 40px;
+    }
+    .active {
+      background: #339999;
+      color: #fff;
+    }
+  }
+  .content{
 		position: relative;
 		background-color: white;
 		width: 100%;
@@ -156,19 +123,19 @@ export default {
 				img{
 					width: 100%;
 					height: 200px;
-					border: 1px solid @borderColor;
+					border: 1px solid red;
 				}
 				span{
 					font-size: 13px;
 					display: block;
 					margin: 10px 0;
-					color:@fontDefaultColor;
+					color:red;
 				}
 				.normalBtn{
 					width: 50px;
 					height: 25px;
-					color:@mainColor;
-					border: 1px solid @mainColor;
+					color:red;
+					border: 1px solid red;
 					background-color: white;
 					border-radius: 5px;
 					margin-right: 5px;
@@ -176,8 +143,8 @@ export default {
 				.deleteBtn{
 					width: 50px;
 					height: 25px;
-					color:@falseColor;
-					border: 1px solid @falseColor;
+					color:red;
+					border: 1px solid red;
 					background-color: white;
 					border-radius: 5px;
 				}
@@ -186,12 +153,12 @@ export default {
 					height: 200px;
 					text-align: center;
 					cursor: pointer;
-					border: 1px solid @borderColor;
-					color:@fontDefaultColor;
+					border: 1px solid red;
+					color:red;
 					div{
 						margin: 50px auto 10px;
 						border-radius: 50%;
-						border:2px solid @fontDefaultColor;
+						border:2px solid red;
 						width: 40px;
 						height: 40px;
 						font-size: 30px;
@@ -203,27 +170,6 @@ export default {
           margin-right: 0;
         }
 			}
-		}
-	}
-	.popupContent{
-		padding: 20px;
-		input{
-			display: block;
-			width: 200px;
-			height: 30px;
-			border: none;
-			border-bottom: 2px solid #333333;
-      margin-top: 20px;
-		}
-		button{
-			display: block;
-			margin: 30px auto 0;
-			background-color: #333333;
-			color:white;
-			border: none;
-			width: 80px;
-			height: 30px;
-			border-radius: 5px;
 		}
 	}
 }

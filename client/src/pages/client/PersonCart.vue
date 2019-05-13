@@ -138,7 +138,6 @@ export default {
         this.carList = [];
         //刷新页面
         this.$router.go(0)
-        // this.$router.push('/mall/personal/myOrder')
         // this.getOrderState(0);
       });
     }

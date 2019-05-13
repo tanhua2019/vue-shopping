@@ -232,7 +232,7 @@ export default {
     height: 150px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    // justify-content: space-between;
     .searchBox {
       display: flex;
       align-items: center;
@@ -261,6 +261,7 @@ export default {
       align-items: center;
       justify-content: center;
       position: relative;
+      margin-left: 100px;
       cursor: pointer;
       i {
         font-size: 18px;

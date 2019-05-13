@@ -1,112 +1,114 @@
 <template>
-  <div class="EditAdmin">
-    <header class="clear">
-  		<span>修改资料</span>
-  	</header>
-  	<div class="content">
-  		<div class="inputBox">
-  			<span>原密码：</span>
-        <TextInput placeholder="请输入原密码" v-model="oldPwd" type="password"/>
-  		</div>
-		<div class="inputBox">
-  			<span>新密码：</span>
-  			<TextInput placeholder="请输入新密码" v-model="newPwd" type="password"/>
-  		</div>
-  		<div class="inputBox">
-  			<span>确认新密码：</span>
-  			<TextInput placeholder="请再输入一次新密码" v-model="confirmPwd" type="password"/>
-  		</div>
-  		<button @click="confirmChange">确认修改</button>
-  	</div>
+  <div class="eidtAdmin" :style="{height:height+'px'}">
+    <div class="box">
+      <el-row class="rows">
+        <el-col :span="8" style="text-align: right;line-height: 40px; padding-right: 20px;">原密码：</el-col>
+        <el-col :span="16">
+          <el-input v-model="adminInfo.oldPwd" clearable placeholder="请输入原密码" type="password"></el-input>
+        </el-col>
+      </el-row>
+      <el-row class="rows">
+        <el-col :span="8" style="text-align: right;line-height: 40px; padding-right: 20px;">新密码：</el-col>
+        <el-col :span="16">
+          <el-input v-model="adminInfo.newPwd" clearable placeholder="请输入新密码" type="password"></el-input>
+        </el-col>
+      </el-row>
+      <el-row class="rows">
+        <el-col :span="8" style="text-align: right;line-height: 40px; padding-right: 20px;">确认新密码：</el-col>
+        <el-col :span="16">
+          <el-input v-model="adminInfo.confirmPwd" clearable placeholder="请再次输入新密码" type="password"></el-input>
+        </el-col>
+      </el-row>
+      <el-button type="primary" @click="confirmChange">保 存</el-button>
+    </div>
+    <div class="buttonBox">
+
+    </div>
+
   </div>
 </template>
 
 <script>
-import TextInput from '../../components/TextInput';
-import { changePwd } from '../../api/admin';
-import { mapState } from 'vuex';
+import { changePwd } from "../../api/admin";
+import { mapState } from "vuex";
 
 export default {
-  name: 'EditAdmin',
-  components:{
-    TextInput
-  },
-  computed:{
-  	...mapState([
-      'adminToken'
-    ]),
-  },
-  data(){
-    return{
-      oldPwd:'',
-      newPwd:'',
-      confirmPwd:''
+  name: "",
+  computed: {
+    ...mapState(["adminToken"]),
+    height() {
+      return this.getClientSize().height;
     }
   },
-  methods:{
-  	confirmChange(){
-  		const adminToken = this.adminToken;
-  		const oldPwd = this.oldPwd+'';
-  		const newPwd = this.newPwd+'';
-  		const confirmPwd = this.confirmPwd+'';
-  		changePwd({
-  			adminToken,
-  			oldPwd,
-  			newPwd,
-  			confirmPwd
-  		}).then(()=>{
-  			this.oldPwd = '';
-  			this.newPwd = '';
-        this.confirmPwd = '';
+  data() {
+    return {
+      adminInfo: {
+        adminToken: "",
+        oldPwd: "",
+        newPwd: "",
+        confirmPwd: ""
+      }
+    };
+  },
+  methods: {
+    getClientSize() {
+      let h =
+        document.documentElement.clientHeight || document.body.clientHeight;
+      return {
+        height: h - 70
+      };
+    },
+    confirmChange() {
+      this.adminInfo.adminToken = this.adminToken;
+      console.log(this.adminInfo);
+      changePwd(this.adminInfo).then(() => {
+        this.adminInfo.oldPwd = "";
+        this.adminInfo.newPwd = "";
+        this.adminInfo.confirmPwd = "";
         this.$message({
-            message: "修改密码成功！",
-            type: "success",
-            duration: 1000
+          message: "修改密码成功！",
+          type: "success",
+          duration: 1000
         });
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	}
+      });
+    }
   }
-}
+};
 </script>
 
-<style scoped lang="less">
-@import "../../assets/css/var.less";
-.EditAdmin{
-	header{
-		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		span{
-			float: left;
-		}
-	}
-	.content{
-		margin-top: 20px;
-		width: 290px;
-		text-align: center;
-		.inputBox{
-			text-align: left;
-			margin-bottom: 20px;
-			span{
-				color:@fontDefaultColor;
-				font-size: 13px;
-				display: inline-block;
-				width: 90px;
-			}
-			input{
-			}
-		}
-		button{
-			background-color: #337da4;
-			color:white;
-			border: none;
-			width: 80px;
-			height: 30px;
-			border-radius: 5px;
-			cursor: pointer;
-		}
-	}
+<style lang='less' scoped>
+.eidtAdmin {
+  background: url(../../assets/img/client.jpg) no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  .box {
+    margin: 50px 0 0 50px;
+    height: 200px;
+    width: 400px;
+    .rows {
+        margin: 20px;
+        display: flex;
+        .el-input {
+          width: 200px;
+          border-radius: 50px;
+        }
+      }
+      .el-button {
+        margin: 0 auto;
+        margin-left: 50%;
+      }
+  }
+}
+</style>
+
+<style lang="less">
+.eidtAdmin {
+    .el-input__inner {
+      border-radius: 50px;
+      padding-left: 20px;
+    }
 }
 </style>

@@ -1,108 +1,125 @@
 <template>
-  <div class="EditUser">
-  	<header class="clear">
-  		<span>用户管理</span>
-  		<div><input ref="input" type="text" placeholder="输入搜索用户" /><button @click="searchUser"><i class="iconfont icon-search" /></button></div>
-  	</header>
-	<table className="userTable">
-        <thead>
-        	<tr><th>用户ID</th><th>email</th><th>昵称</th><th>性别</th><th>收件人</th><th>收货地址</th><th>联系电话</th><th>操作</th></tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item,index) in userList" :key="'user'+item.id">
-                <td>{{item.id}}</td>
-                <td>{{item.email}}</td>
-                <td>{{item.nickname}}</td>
-                <td>{{item.sex}}</td>
-                <td>{{item.recipient}}</td>
-                <td>{{item.address}}</td>
-                <td>{{item.phone}}</td>
-                <td><button class="delete" @click="deleteUser(item.id)">删除</button></td>
-            </tr>
-        </tbody>
-    </table>
+  <div class="editUser">
+    <div class="userHead">
+      <span>用户管理</span>
+      <div class="inputBox">
+        <el-select
+          v-model="content"
+          clearable
+          filterable
+          remote
+          reserve-keyword
+          placeholder="输入搜索用户"
+          :remote-method="userMethod"
+          :loading="loading"
+          @keyup.enter.native="searchConfirm"
+        >
+          <el-option
+            v-for="item in userList"
+            :key="item.value"
+            :label="item.email"
+            :value="item.email"
+          ></el-option>
+        </el-select>
+        <el-button type="primary" @click="searchConfirm">搜索</el-button>
+      </div>
+    </div>
+    <div class="table">
+      <el-table :data="users" stripe styel="width: 90%" border :header-cell-style="tableStyle">
+        <el-table-column prop="id" label="用户ID" align="center"></el-table-column>
+        <el-table-column prop="email" label="email" align="center"></el-table-column>
+        <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
+        <el-table-column prop="sex" label="性别" align="center"></el-table-column>
+        <el-table-column prop="recipient" label="收件人" align="center"></el-table-column>
+        <el-table-column prop="address" label="收货地址" align="center"></el-table-column>
+        <el-table-column prop="phone" label="联系电话" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" @click="deleteUser(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
-import {getAllUser,getSearchUser,deleteUser} from '../../api/admin';
+import { getAllUser, getSearchUser, deleteUser } from "../../api/admin";
+
 export default {
-  name: 'EditUser',
-  computed:{
+  name: "",
+  data() {
+    return {
+      //表头样式
+      tableStyle: {
+        background: "#f5f7fa",
+        "font-weight": "800"
+      },
+      users: [],
+      content: "",
+      loading: false,
+      userList: []
+    };
   },
-  data(){
-  	return{
-  		userList:[]
-  	}
+  mounted() {
+    getAllUser().then(res => {
+      this.users = res;
+    });
   },
-  mounted(){
-  	getAllUser().then((users)=>{
-  		this.userList = users;
-  	}).catch((e)=>{
-  		alert(e)
-  	})
-  },
-  methods:{
-  	deleteUser(id){
-  	deleteUser(id).then(()=>{
-        this.$message({
-            message: "删除成功！",
-            type: "success",
-            duration: 1000
+  methods: {
+    userMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        getSearchUser(query).then(res => {
+          console.log(res, "0000");
+          this.userList = res;
+          this.loading = false;
         });
-  			this.userList.map((item,index)=>{
-  				if(item.id===id){
-  					this.userList.splice(index,1);
-  				}
-  			})
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	searchUser(){
-  		const val = this.$refs.input.value;
-  		getSearchUser(val).then((data)=>{
-  			this.userList = data;
-  		})
-  		.catch((e)=>{
-  			alert(e);
-  		})
-  	},
+      } else {
+        this.userList = [];
+      }
+    },
+    searchConfirm() {
+      this.content = this.content?this.content: '',
+      console.log("dianji l", this.content);
+      getSearchUser(this.content).then(data => {
+        this.users = data;
+      });
+    },
+    deleteUser(id) {
+      deleteUser(id).then(() => {
+        this.$message({
+          message: "删除成功！",
+          type: "success",
+          duration: 1000
+        });
+        this.userList.map((item, index) => {
+          if (item.id === id) {
+            this.userList.splice(index, 1);
+          }
+        });
+        this.getAllUser();
+      });
+    }
   }
-}
+};
 </script>
 
-<style scoped lang="less">
-@import "../../assets/css/var.less";
-.EditUser{
-	header{
-		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		span{
-			float: left;
-		}
-		div{
-			height: 20px;
-			float: right;
-      input{
-        border: none;
-        border-bottom: 1px solid #337da4;
-        background-color: rgba(0,0,0,0);
-        width: 180px;
-        padding-left: 10px;
-      }
-			button{
-        position: relative;
-        top: -1px;
-        border: none;
-        background-color: rgba(0,0,0,0);
-				i{
-					font-size: 17px;
-          color:#337da4;
-				}
-			}
-		}
-	}
+<style lang='less' scoped>
+.editUser {
+  .userHead {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    .el-input {
+      width: 200px;
+    }
+  }
+  .table {
+    width: 90%;
+    margin: 0 auto;
+  }
 }
 </style>

@@ -15,10 +15,10 @@ let router = new Router({
       component: () => import('@/pages/admin/Login')
     },
     {
-      path: '/backHome',
-      name: 'BackHome',
-      component: () => import('@/pages/admin/backHome'),
-      redirect: "/backHome/editUser",
+      path: '/backstage',
+      name: 'Backstage',
+      redirect: "/backstage/editUser",
+      component: () => import('@/pages/admin/Backstage'),
       children: [
         {
           path: 'editUser',
@@ -28,7 +28,7 @@ let router = new Router({
             requireLogin: true,
           },
         },
-        {
+         {
           path: 'editAdmin',
           name: 'EditAdmin',
           component: () => import('@/pages/admin/EditAdmin'),
@@ -60,7 +60,7 @@ let router = new Router({
             requireLogin: true,
           },
         },
-        {
+         {
           path: 'orders/:id',
           name: 'EditOrders',
           component: () => import('@/pages/admin/EditOrders'),
