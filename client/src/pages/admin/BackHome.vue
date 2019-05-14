@@ -4,7 +4,7 @@
       <div class="topLeft">购物商城后台管理系统</div>
       <div class="topRight">
         <span>欢迎您，{{adminName}}</span>
-        <span @click="navTo('/backHome/editAdmin')">个人中心</span>
+        <!-- <span @click="navTo('/backHome/editAdmin')">个人中心</span> -->
         <span @click="logout">退出登陆</span>
       </div>
     </div>

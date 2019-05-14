@@ -44,6 +44,9 @@ router.delete('/api/admin/deleteOrder', orderAdmin.deleteOrder);
 //得到类目
 router.get('/api/admin/getType', goodsAdmin.getType);
 
+//删除类型
+router.delete('/api/admin/deleteType', goodsAdmin.deleteType);
+
 //得到商品
 router.get('/api/admin/getGoodsByType', goodsAdmin.getGoodsByType);
 

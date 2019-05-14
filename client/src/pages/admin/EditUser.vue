@@ -29,7 +29,9 @@
         <el-table-column prop="id" label="用户ID" align="center"></el-table-column>
         <el-table-column prop="email" label="email" align="center"></el-table-column>
         <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
-        <el-table-column prop="sex" label="性别" align="center"></el-table-column>
+        <el-table-column prop="sex" label="性别" align="center">
+          {{sex == 0 ? "男":"女"}}
+        </el-table-column>
         <el-table-column prop="recipient" label="收件人" align="center"></el-table-column>
         <el-table-column prop="address" label="收货地址" align="center"></el-table-column>
         <el-table-column prop="phone" label="联系电话" align="center"></el-table-column>
@@ -58,7 +60,8 @@ export default {
       users: [],
       content: "",
       loading: false,
-      userList: []
+      userList: [],
+      sex: '',
     };
   },
   mounted() {

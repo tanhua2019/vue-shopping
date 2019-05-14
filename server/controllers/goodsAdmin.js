@@ -69,6 +69,27 @@ exports.addType = async (ctx)=>{
 	}
 }
 
+//删除类目
+exports.deleteType = async (ctx)=>{
+	const id = ctx.query.id;
+	try{
+		const res = await TypeModel.destroy({
+			where:{
+        id: id,
+			}
+		});
+		ctx.body = {
+			code:0
+		}
+	}
+	catch(e){
+		ctx.body={
+			code:10000,
+			message:'网络出错'
+		}
+	}
+}
+
 //得到商品信息
 exports.getGoodsInfo = async (ctx)=>{
 	const id = ctx.query.id;

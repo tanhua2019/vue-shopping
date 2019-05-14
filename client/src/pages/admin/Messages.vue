@@ -1,108 +1,120 @@
 <template>
-  <div class="Messages">
-    <header class="clear">
-  		<span>留言管理</span>
-  	</header>
-  	<Tag :tagList="tags" @indexChange="changeTag"/>
-  	<div class="content">
-  		<ul class="msgList" v-if="curIndex===0">
-  			<li v-for="(item,index) in noReplyMsgList" :key="'noReply'+item.id" class="clear">
-  				<img :src="item.user.headimg" alt="" />
-  				<div class="info">
-  					<span class="name">{{item.user.name}}</span>
-  					<div class="goods ellipsis">商品：{{item.goods.name}}</div>
-  					<p>{{item.content}}</p>
-  				</div>
-  				<div class="operate">
-  					<div>{{item.time}}</div>
-  					<button @click="reply(item.id)">回复</button>
-  				</div>
-  			</li>
-  		</ul>
-  		<ul class="msgList" v-else="curIndex===1">
-  			<li v-for="(item,index) in repliedMsgList" :key="'replied'+item.id" class="clear">
-  				<img :src="item.user.headimg" alt="" />
-  				<div class="info">
-  					<span class="name">{{item.user.name}}</span>
-  					<div class="goods ellipsis">商品：{{item.goods.name}}</div>
-  					<p>{{item.content}}</p>
-  					<p class="replyContent">{{'回复内容：'+item.replyContent}}</p>
-  				</div>
-  				<div class="operate">
-  					<div>{{item.time}}</div>
-  					<span>已回复</span>
-  				</div>
-  			</li>
-  		</ul>
-  	</div>
-  	<Popup title="回复留言" @popupClose="closePopup" v-show="popupShow">
-  		<div class="popupContent" slot="popupContent">
-  			<textarea ref="replyText" cols="30" rows="10" placeholder="请输入回复内容"></textarea>
-  			<button @click="replyConfirm">确认</button>
-  		</div>
-  	</Popup>
+  <div class="messageBox">
+    <div class="messageHead">
+      <span>留言管理</span>
+    </div>
+    <div class="buttonBox">
+      <el-button
+        size="small"
+        v-for="(item,index) in buttonTag"
+        :key="index"
+        :class="{active:index == isActive}"
+        @click="changeTab(index)"
+        v-waves
+      >{{item}}</el-button>
+    </div>
+    <div class="content">
+      <ul v-if="isActive===0" class="ulBox">
+        <li v-for="(item,index) in noReplyMsgList" :key="index" class="liBox">
+          <div class="left">
+            <img :src="item.user.headimg" alt>
+            <div class="leftgood">
+              <p>{{item.user.name}}</p>
+              <p>商品：{{item.goods.name}}</p>
+              <p>{{item.content}}</p>
+            </div>
+          </div>
+          <div class="rightBox">
+            <span>{{item.time}}</span>
+            <el-button type="primary" @click="reply(item.id)">回复</el-button>
+          </div>
+        </li>
+      </ul>
+      <ul v-if="isActive===1" class="ulBox">
+        <li v-for="(item,index) in repliedMsgList" :key="index" class="liBox">
+          <div class="left">
+            <img :src="item.user.headimg" alt>
+            <div class="leftgood">
+              <p>{{item.user.name}}</p>
+              <p>商品：{{item.goods.name}}</p>
+              <p>{{item.content}}</p>
+              <p>{{'回复内容：'+item.replyContent}}</p>
+            </div>
+          </div>
+          <div class="rightBox">
+            <span>{{item.time}}</span>
+            <el-button disabled type="success">已回复</el-button>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <el-dialog :visible.sync="isShow" title="请回复留言内容" class="dialogs" width="450px">
+      <div class="box">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder="请输入回复内容："
+          v-model="text"
+        ></el-input>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="replyConfirm">确 定</el-button>
+        <el-button @click="isShow = !isShow">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {getNoReplyMsg,getRepliedMsg,reply} from '../../api/admin';
-import Tag from '../../components/Tag';
-import Popup from '../../components/Popup';
-
+import waves from "@/directive/waves";
+import { getNoReplyMsg, getRepliedMsg, reply } from "../../api/admin";
 export default {
-  name: 'Messages',
-  components:{
-  	Tag,
-  	Popup
+  name: "",
+  directives: {
+    waves
   },
-  computed:{
+  data() {
+    return {
+      buttonTag: ["未回复", "已回复"],
+      isActive: 0,
+      noReplyMsgList: [],
+      repliedMsgList: [],
+      isShow: false,
+      curMsgId: '',
+      text: ''
+    };
   },
-  data(){
-  	return{
-  		tags:['未回复','已回复'],
-  		noReplyMsgList:[],
-  		repliedMsgList:[],
-  		curIndex:0,
-  		curMsgId:0,
-  		popupShow:false
-  	}
+  mounted() {
+    this.getNoReplyMsg();
   },
-  methods:{
-  	changeTag(index){
-  		this.curIndex = index;
-  		if(index===1){
-  			this.getRepliedMsg();
-  		}else{
-  			this.getNoReplyMsg();
-  		}
-  	},
-  	getNoReplyMsg(){
-  		getNoReplyMsg().then((msgs)=>{
-  			this.noReplyMsgList = msgs;
-  		}).catch((e)=>{
-  			// alert(e);
-  		})
-  	},
-  	getRepliedMsg(){
-  	  getRepliedMsg().then((msgs)=>{
-  			this.repliedMsgList = msgs;
-  		}).catch((e)=>{
-  			alert(e);
-  		})
-  	},
-  	reply(id){
-  		this.popupShow = true;
-  		this.curMsgId = id;
-  		this.$refs.replyText.value = '';
-  	},
-  	closePopup(){
-  		this.popupShow = false;
-  	},
-  	replyConfirm(){
-  		const val = this.$refs.replyText.value;
+  methods: {
+    changeTab(index) {
+      this.isActive = index;
+      if (index === 1) {
+        this.getRepliedMsg();
+      } else {
+        this.getNoReplyMsg();
+      }
+    },
+    getNoReplyMsg() {
+      getNoReplyMsg().then(res => {
+        console.log(res, "000");
+        this.noReplyMsgList = res;
+      });
+    },
+    getRepliedMsg() {
+      getRepliedMsg().then(res => {
+        this.repliedMsgList = res;
+      });
+    },
+    reply(id) {
+      this.isShow = true;
+      this.curMsgId = id;
+    },
+    replyConfirm(){
   		reply({
   			id:this.curMsgId,
-  			content:val
+  			content: this.text
   		}).then(()=>{
         this.$message({
             message: "回复成功!",
@@ -113,117 +125,96 @@ export default {
   				if(item.id===this.curMsgId){
   					this.noReplyMsgList.splice(index,1);
   				}
-  			});
-  			this.closePopup();
-  		}).catch((e)=>{
-  			alert(e);
+        });
+        this.text = '',
+  			this.isShow = !this.isShow;
   		})
   	},
-  },
-  mounted(){
-  	this.getNoReplyMsg();
   }
-}
+};
 </script>
 
-<style scoped lang="less">
-@import "../../assets/css/var.less";
-.Messages{
-	header{
-		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		span{
-			float: left;
-		}
-	}
-	.content{
-		width: 100%;
-		background-color: white;
-		position: relative;
-		top: -3px;
-		padding: 20px;
-		.msgList{
-			li{
-				width: 100%;
-				border: 1px solid @borderColor;
-				padding: 10px;
-				position: relative;
-				margin-bottom: 5px;
-				img{
-					position: absolute;
-					width: 48px;
-					height: 48px;
-					display: inline-block;
-					margin-right: 20px;
-					top: 50%;
-					margin-top: -24px;
-				}
-				.info{
-					display: inline-block;
-					margin-left: 70px;
-					max-width: 820px;
-					font-size: 13px;
-					.name{
-						font-size: 15px;
-					}
-					.goods{
-						color:@mainColor;
-						font-size: 13px;
-						margin-top: 10px;
-					}
-					p{
-						margin-top: 10px;
-						color:@fontDefaultColor;
-					}
-					.replyContent{
-					}
-				}
-				.operate{
-					display: inline-block;
-					width: 150px;
-					height: 60px;
-					position: absolute;
-					margin-top: -30px;
-					top: 50%;
-					right:10px;
-					text-align: right;
-					div{
-						text-align: right;
-						color:@fontDefaultColor;
-						margin-bottom: 15px;
-					}
-					button{
-						width: 50px;
-						height: 25px;
-						color:@secondColor;
-						border: 1px solid @secondColor;
-						background-color: white;
-						border-radius: 5px;
-					}
-				}
-			}
-		}
-	}
-	.popupContent{
-		width: 300px;
-		padding: 8px;
-		textarea{
-			width: 100%;
-			height: 100px;
-			display: block;
-			border: 1px solid @borderColor;
-			padding: 3px;
-		}
-		button{
-			display: block;
-			width: 70px;
-			height: 30px;
-			margin:10px auto 5px;
-			background-color:  #333333;
-			color:white;
-			border: none;
-		}
-	}
+<style lang='less' scoped>
+.messageBox {
+  .messageHead {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+  }
+  .buttonBox {
+    width: 100%;
+    padding: 0 5%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    .el-button {
+      width: 200px;
+      height: 40px;
+    }
+    .active {
+      background: #339999;
+      color: #fff;
+    }
+  }
+  .content {
+    .ulBox {
+      .liBox {
+        width: 90%;
+        margin: 20px auto;
+        height: 120px;
+        background: #ccc;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .left {
+          display: flex;
+          flex-wrap: wrap;
+          img {
+            margin: 0 10px;
+            width: 80px;
+            height: 80px;
+          }
+          .leftgood {
+            p {
+              margin: 6px;
+            }
+          }
+        }
+        .rightBox {
+          padding-right: 20px;
+          display: flex;
+          flex-direction: column;
+          .el-button {
+            margin-top: 20px;
+          }
+          span {
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+
+
+<style lang="less">
+.messageBox {
+  .el-dialog__header {
+    background: #ccc;
+    height: 60px;
+  }
+  .el-dialog__body {
+    padding: 30px 20px;
+  }
+  .el-dialog__footer {
+    display: flex;
+    justify-content: center;
+    .el-button {
+      width: 120px;
+    }
+  }
 }
 </style>

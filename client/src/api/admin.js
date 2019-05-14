@@ -46,6 +46,9 @@ export const getTypes = () => get('/api/admin/getType');
 //增加类目
 export const addType = data => post('/api/admin/addType',data);
 
+//删除类目
+export const deleteType = id => deletes('/api/admin/deleteType?id='+id);
+
 //得到商品信息
 export const getGoodsInfo = id => get('/api/admin/getGoodsInfo?id='+id);
 
