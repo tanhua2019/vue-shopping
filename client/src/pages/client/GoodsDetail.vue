@@ -27,18 +27,76 @@
           </div>
           <div class="infoBox">
             <span>数量：</span>
-            <el-input-number
-              v-model="num"
-              :min="1"
-              :max="maxNum"
-              label="描述文字"
-              type:number
-            ></el-input-number>
+            <el-input-number v-model="num" :min="1" :max="maxNum" label="描述文字" type:number></el-input-number>
           </div>
-          <button class="buyBtn">立即购买</button>
-          <button>加入购物车</button>
+          <button class="buyBtn" @click="buy">立即购买</button>
+          <button @click="addToCart">加入购物车</button>
         </div>
       </div>
+      <section class="msgBox leftContainer">
+        <ul class="tagList">
+          <li
+            :class="{selected:curIndex===index}"
+            v-for="(item,index) in tagList"
+            :key="'tag'+index"
+            @click="changeIndex(index)"
+          >{{item}}</li>
+        </ul>
+        <div class="commentBody" v-if="curIndex===0">
+          <div v-if="commentList.length>0">
+            <div class="rateBox">
+              <span>好评率</span>
+              <span class="rate">{{rate+'%'}}</span>
+            </div>
+            <ul class="commentList">
+              <li v-for="(item,index) in commentList" :key="'comment'+index">
+                <div class="userInfo">
+                  <img :src="item.user.headimg">
+                  <span>{{item.user.nickname}}</span>
+                </div>
+                <div class="commentInfo">
+                  <div class="starList">
+                    <i
+                      class="iconfont icon-collection_fill"
+                      v-for="(star,index) in (item.score/20)"
+                      :key="item.id+''+index"
+                    />
+                  </div>
+                  <p class="specName">{{item.specName}}</p>
+                  <p class="comment">{{item.comment}}</p>
+                  <p class="time">{{item.time}}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="noComment" v-else>暂时还没有评论~</div>
+        </div>
+        <div class="msgBody" v-else>
+          <div class="inputBox">
+            <textarea placeholder="请输入提问内容" v-model="askContent" cols="30" rows="10"></textarea>
+            <button
+              v-if="clientToken"
+              @click="postAsk"
+              :class="{ban:askContent.trim().length<=0}"
+            >提问</button>
+            <div v-else class="banAsk">请先登录</div>
+          </div>
+          <ul class="msgList">
+            <li v-for="(item,index) in msgList" :key="'msg'+index">
+              <div class="ask">
+                <span class="note">问</span>
+                <span class="text">{{item.content}}</span>
+                <span class="tipsInfo">{{item.asker+' '+item.time}}</span>
+              </div>
+              <div class="answer">
+                <span class="note">答</span>
+                <span class="text">{{Object.keys(item.reply).length>0?item.reply.content:'暂时没有回答'}}</span>
+                <span class="tipsInfo">{{Object.keys(item.reply).length>0?item.reply.time:''}}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -51,10 +109,9 @@ import {
   askGoodsMsg,
   addOrder,
   getComment,
-  getGoodsList,
   getOrderByState
 } from "../../api/client";
-import GoodsItem from "../../components/GoodsItem";
+import GoodsItem from "@/components/GoodsItem";
 
 export default {
   name: "GoodsDetail",
@@ -83,11 +140,13 @@ export default {
         }
       });
       return maxNum;
-    },
+    }
   },
   watch: {
     $route(to, from) {
       this.getGoodsInfo(to.params.id);
+      this.getGoodsMsg(to.params.id);
+      this.getComment(to.params.id);
     }
   },
   data() {
@@ -96,10 +155,22 @@ export default {
       specs: [],
       temSpecId: 0,
       num: 1,
+      orderList: {
+        goods: []
+      },
+      tagList: ["评价", "商品问答"],
+      curIndex: 0,
+      rate: "",
+      commentList: [],
+      msgList: [],
+      askContent: ""
     };
   },
   mounted() {
     this.getGoodsInfo(this.id);
+    this.getGoodsMsg(this.id);
+    this.getComment(this.id);
+    this.getOrderState(0);
   },
   methods: {
     ...mapMutations(["addCar"]),
@@ -111,10 +182,20 @@ export default {
         console.log(this.goodsInfo, "998");
       });
     },
+    getOrderState(state) {
+      getOrderByState(state, this.clientToken).then(res => {
+        console.log(res, "购物车数量");
+        this.orderList = res;
+        //解决购物车数量默认值报错
+        this.orderList.map((item, index) => {
+          item.temGoodsNum = item.goodsNum;
+        });
+      });
+    },
     buy() {
       if (!this.clientToken) {
-       this.$message.error('请先登录');
-       return;
+        this.$message.error("请先登录");
+        return;
       }
       addOrder({
         token: this.clientToken,
@@ -123,13 +204,73 @@ export default {
         state: 1,
         amount: this.goodsPrice
       }).then(() => {
-          this.$message({
+        this.$message({
           message: "自动付款成功！请耐心等待包裹派送~",
           type: "success",
           duration: 1000
         });
-        })
+      });
     },
+    addToCart() {
+      if (!this.clientToken) {
+        this.$message.error("请先登录");
+        return;
+      }
+      this.addCar(this.orderList.length + 1);
+      addOrder({
+        token: this.clientToken,
+        goodsDetailId: this.temSpecId,
+        state: 0,
+        num: this.num,
+        amount: this.goodsPrice
+      }).then(() => {
+        this.$message({
+          message: "加入购物车成功！",
+          type: "success",
+          duration: 1000
+        });
+      });
+    },
+    changeIndex(index) {
+      this.curIndex = index;
+    },
+    getComment(goodsId) {
+      getComment(goodsId).then(data => {
+        if (Object.keys(data).length <= 0) {
+          this.rate = "";
+          this.commentList = [];
+          return;
+        }
+        this.rate = data.rate;
+        this.commentList = data.commentList;
+      });
+    },
+    getGoodsMsg(id) {
+      getGoodsMsg(id).then(res => {
+        this.msgList = res;
+      });
+    },
+    postAsk() {
+      if (this.askContent.trim().length <= 0) {
+        return;
+      }
+      askGoodsMsg({
+        token: this.clientToken,
+        msg: this.askContent,
+        goodsId: this.id
+      }).then(() => {
+        let time = new Date();
+        this.msgList.unshift({
+          id: "new",
+          content: this.askContent,
+          state: 0,
+          asker: this.clientName,
+          time: time.getMonth() + 1 + "-" + time.getDate(),
+          reply: {}
+        });
+        this.askContent = "";
+      });
+    }
   }
 };
 </script>
@@ -369,27 +510,6 @@ export default {
               }
             }
           }
-        }
-      }
-    }
-    .typeGoods {
-      margin: 50px 0;
-      border: 1px solid #e6e8eb;
-      padding-top: 0;
-      .title {
-        text-align: center;
-        width: 100%;
-        height: 40px;
-        line-height: 40px;
-        background-color: #f5f5f5;
-        font-weight: 600;
-        border-bottom: 1px solid #e6e8eb;
-      }
-      .list {
-        .GoodsItem {
-          display: block;
-          border-bottom: 1px dotted #e6e8eb;
-          margin: 0 auto;
         }
       }
     }

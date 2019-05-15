@@ -28,7 +28,14 @@
       >
     </FadeSwiper>
     <section class="newGoods section">
-      <SectionHeader title="新品首发" tips="周一周四上新，为你寻觅世间好物" moreText="更多新品>"/>
+      <div class="SectionHeader">
+        <div class="left">
+          <h3>新品首发</h3>
+          <span>周一周四上新，为你寻觅世间好物</span>
+        </div>
+        <span class="right">更多新品></span>
+      </div>
+
       <Slick
         :ulWidth="(266*goodsList.length)+(10*(goodsList.length-1))"
         :showWidth="(266*4)+(10*3)"
@@ -48,7 +55,14 @@
       </Slick>
     </section>
     <section class="maker section">
-      <SectionHeader title="品牌制造商" tips="工厂直达消费者，剔除品牌溢价" moreText="更多制造商>"/>
+      <div class="SectionHeader">
+        <div class="left">
+          <h3>品牌制造商</h3>
+          <span>工厂直达消费者，剔除品牌溢价</span>
+        </div>
+        <span class="right">更多制造商></span>
+      </div>
+
       <div class="content">
         <ZoomImg
           imgSrc="http://yanxuan.nosdn.127.net/0266209ded1751f599fe0dc21bb33e02.jpg"
@@ -93,16 +107,14 @@
 
 <script>
 import { getTypes, getGoodsList } from "../../api/client";
-import SectionHeader from "../../components/SectionHeader";
-import ZoomImg from "../../components/ZoomImg";
-import GoodsItem from "../../components/GoodsItem";
-import Slick from "../../components/Slick";
-import FadeSwiper from "../../components/FadeSwiper";
+import ZoomImg from "@/components/ZoomImg";
+import GoodsItem from "@/components/GoodsItem";
+import Slick from "@/components/Slick";
+import FadeSwiper from "@/components/FadeSwiper";
 
 export default {
   name: "MallIndex",
   components: {
-    SectionHeader,
     ZoomImg,
     GoodsItem,
     Slick,
@@ -191,6 +203,42 @@ export default {
   .section {
     padding: 30px;
     overflow: hidden;
+    .SectionHeader {
+      width: 100%;
+      height: 66px;
+      .left {
+        display: inline-block;
+        vertical-align: middle;
+        height: 40px;
+        h3 {
+          display: inline-block;
+          font-size: 28px;
+          cursor: pointer;
+          &:hover {
+            color: #b4a078;
+          }
+        }
+        span {
+          display: inline-block;
+          margin-left: 25px;
+          font-size: 14px;
+          color: #333;
+        }
+      }
+      .right {
+        display: inline-block;
+        vertical-align: middle;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+        float: right;
+        &:hover {
+          color: #b4a078;
+        }
+      }
+    }
     .Slick {
       position: relative;
       left: -30px;
