@@ -165,7 +165,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
 .Mall {
   width: 100%;
   .navBar {
@@ -211,7 +210,7 @@ export default {
         width: 100%;
         height: 80px;
         text-align: center;
-        border-bottom: 1px solid @borderColor;
+        border-bottom: 1px solid #e6e8eb;
         cursor: pointer;
         padding-top: 12px;
         i {
@@ -230,10 +229,10 @@ export default {
         }
         &:hover {
           i {
-            color: @thirdColor;
+            color: #b4a078;
           }
           span {
-            color: @thirdColor;
+            color: #b4a078;
           }
         }
       }
@@ -242,7 +241,7 @@ export default {
   .bottomInfo {
     width: 100%;
     height: 300px;
-    border-top: 1px solid @borderColor;
+    border-top: 1px solid #e6e8eb;
     overflow: hidden;
     margin-top: 80px;
     .footerItem {
@@ -253,25 +252,25 @@ export default {
       display: inline-block;
       text-align: center;
       vertical-align: middle;
-      color: @fontDefaultColor;
+      color: #7d7d7d;
       .title {
-        color: @fontDeepColor;
+        color: #7d7d7d;
         margin-bottom: 30px;
       }
     }
     .service {
-      border-right: 1px solid @borderColor;
+      border-right: 1px solid #e6e8eb;
       span {
         display: inline-block;
         width: 80px;
         height: 100px;
-        border: 1px solid @borderColor;
+        border: 1px solid #e6e8eb;
         text-align: center;
         margin: 0 10px;
         font-size: 14px;
         cursor: pointer;
         &:hover {
-          color: @thirdColor;
+          color: #b4a078;
         }
         i {
           display: block;
@@ -282,13 +281,13 @@ export default {
       }
     }
     .intro {
-      border-right: 1px solid @borderColor;
+      border-right: 1px solid #e6e8eb;
       .intro-p {
         font-size: 13px;
         width: 300px;
         margin: 0 auto;
         text-align: left;
-        color: @fontDeepColor;
+        color: #7d7d7d;
         line-height: 1.8em;
       }
       div {
@@ -310,7 +309,7 @@ export default {
       }
       span {
         font-size: 12px;
-        color: @thirdColor;
+        color: #b4a078;
         margin-top: 10px;
         display: block;
       }
@@ -341,7 +340,7 @@ export default {
       }
     }
     .footerBottom {
-      color: @fontDefaultColor;
+      color: #7d7d7d;
       margin-top: 30px;
       font-size: 13px;
       text-align: center;
@@ -350,7 +349,7 @@ export default {
           display: inline-block;
           cursor: pointer;
           padding: 0 6px;
-          border-right: 2px solid @fontDefaultColor;
+          border-right: 2px solid #7d7d7d;
           &:last-child {
             border-right: none;
           }

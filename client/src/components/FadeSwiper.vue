@@ -75,7 +75,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .FadeSwiper{
   position: relative;
   overflow: hidden;
@@ -109,9 +108,9 @@ export default {
     position: absolute;
     display: inline-block;
     vertical-align: middle;
-    background-color: @thirdColor;
+    background-color: #b4a078;
     border-radius: 50%;
-    text-align: center; 
+    text-align: center;
     cursor: pointer;
     opacity: 0.7;
     &:hover{

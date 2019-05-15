@@ -44,7 +44,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .GoodsItem{
   display: inline-block;
   width: 266px;
@@ -79,13 +78,13 @@ export default {
       font-weight: 600;
       line-height: 20px;
       &:hover{
-        color:@thirdColor;
+        color:#b4a078;
       }
     }
     .price{
       display: block;
       text-align: center;
-      color:@falseColor;
+      color:#be4141;
     }
   }
 }

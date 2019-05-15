@@ -60,12 +60,11 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .Slick{
   .prev,.next{
     display: inline-block;
     vertical-align: middle;
-    background-color: @thirdColor;
+    background-color: #b4a078;
     border-radius: 50%;
     text-align: center;
     position: relative;

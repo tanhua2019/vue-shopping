@@ -192,7 +192,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
 .personOrderBox{
   .buttonBox {
     margin-top: 10px;

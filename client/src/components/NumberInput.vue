@@ -55,9 +55,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .NumberInput{
-  border: 1px solid @borderColor;
+  border: 1px solid #e6e8eb;
   width: 135px;
   height: 35px;
   user-select: none;
@@ -69,7 +68,7 @@ export default {
     cursor: pointer;
     text-align: center;
     line-height: 30px;
-    color:@fontDeepColor;
+    color:#263238;
     font-size: 26px;
   }
   input{
@@ -79,8 +78,8 @@ export default {
     width: 65px;
     height: 33px;
     text-align: center;
-    border-left: 1px solid @borderColor;
-    border-right: 1px solid @borderColor;
+    border-left: 1px solid #e6e8eb;
+    border-right: 1px solid #e6e8eb;
   }
   .ban{
     cursor: not-allowed;

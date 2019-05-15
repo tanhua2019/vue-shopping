@@ -1,6 +1,5 @@
 import {get,post,deletes} from '../config/axios-client'
 
-
 //用户登录
 export const login = data => post('/api/user/login', data);
 //用户注册

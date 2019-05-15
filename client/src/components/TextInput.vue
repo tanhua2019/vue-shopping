@@ -38,9 +38,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .TextInput{
-  border: 1px solid @borderColor;
+  border: 1px solid #e6e8eb;
   padding: 6px 10px;
   border-radius: 5px;
   display: inline-block;

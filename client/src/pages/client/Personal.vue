@@ -33,12 +33,11 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../../assets/css/var.less";
 .Personal {
   padding-top: 20px;
   .titleList {
     width: 180px;
-    border: 1px solid @borderColor;
+    border: 1px solid #e6e8eb;
     padding: 20px 0;
     display: inline-block;
     overflow: hidden;
@@ -46,14 +45,14 @@ export default {
       width: 100%;
       margin: 20px 0;
       padding-left: 30px;
-      color: @fontDefaultColor;
+      color: #7d7d7d;
       font-size: 15px;
       cursor: pointer;
       border-left: 2px solid transparent;
     }
     .selected {
-      border-left: 2px solid @thirdColor;
-      color: @thirdColor;
+      border-left: 2px solid #b4a078;
+      color: #b4a078;
     }
   }
   .content {

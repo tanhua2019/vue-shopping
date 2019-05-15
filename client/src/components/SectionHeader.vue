@@ -35,7 +35,6 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .SectionHeader{
   width: 100%;
   height: 66px;
@@ -48,7 +47,7 @@ export default {
       font-size: 28px;
       cursor: pointer;
       &:hover{
-        color:@thirdColor;
+        color:#b4a078;
       }
     }
     span{
@@ -68,7 +67,7 @@ export default {
     color:#333;
     float: right;
     &:hover{
-      color:@thirdColor;
+      color:#b4a078;
     }
   }
 }

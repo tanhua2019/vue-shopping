@@ -35,10 +35,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .Radio{
   display: inline-block;
-  border: 1px solid @borderColor;
+  border: 1px solid #e6e8eb;
   border-radius: 3px;
   width: auto;
   margin-right: 10px;
@@ -53,7 +52,7 @@ export default {
     position: relative;
     &:after{
       background-color:white;
-      border: 1px solid @borderColor;
+      border: 1px solid #e6e8eb;
       border-radius:100%;
       content:"";
       display:inline-block;
@@ -67,7 +66,7 @@ export default {
   }
   input:checked+.tipsBox{
     &:after{
-      background-color:@thirdColor;
+      background-color:#b4a078;
     }
   }
 }</style>

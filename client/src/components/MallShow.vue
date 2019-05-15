@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import {getClientSize} from '../util/util';
 import { getTypes, getGoodsList, getOrderByState } from "../api/client";
 import { mapState, mapMutations } from "vuex";
 
@@ -69,7 +68,7 @@ export default {
   },
   data() {
     return {
-      width: '',
+      width: "",
       token: false,
       orderList: {
         goods: []
@@ -85,11 +84,42 @@ export default {
       ]
     };
   },
+  watch: {
+    searchText(newVal, oldVal) {
+      this.searchTextChange(newVal);
+    }
+  },
   created() {
     this.cars();
   },
+
+  mounted() {
+    this.getOrderState(0); //获取数据
+    getTypes()
+      .then(data => {
+        data.unshift({
+          id: -1,
+          name: "首页"
+        });
+        this.typeList = data;
+        console.log(this.typeList);
+      })
+      .catch(e => {
+        alert(e);
+      });
+    //监听滚动事件
+    document.addEventListener("scroll", this.scrollHandle, false);
+    this.width = this.getClientSize().width + "px";
+  },
   methods: {
-    ...mapMutations(['showCar']),
+    ...mapMutations(["showCar"]),
+    //获取屏幕高
+    getClientSize() {
+      let w = document.documentElement.clientWidth || document.body.clientWidth;
+      return {
+        width: w,
+      };
+    },
     cars() {
       if (this.clientToken) {
         this.token = true;
@@ -163,9 +193,7 @@ export default {
     querySearch(queryString, cb) {
       var searchList = this.searchList;
       console.log(this.searchList, "009");
-      var results = queryString
-        ? searchList.filter(this.createFilter(queryString))
-        : searchList;
+      var results = queryString ? searchList.filter(this.createFilter(queryString)) : searchList;
       // 调用 callback 返回建议列表的数据
       cb(results);
     },
@@ -175,39 +203,14 @@ export default {
       };
     }
   },
-
-  mounted() {
-    this.getOrderState(0); //获取数据
-    getTypes()
-      .then(data => {
-        data.unshift({
-          id: -1,
-          name: "首页"
-        });
-        this.typeList = data;
-        console.log(this.typeList);
-      })
-      .catch(e => {
-        alert(e);
-      });
-    //监听滚动事件
-    document.addEventListener("scroll", this.scrollHandle, false);
-    this.width = getClientSize().width+'px';
-  },
-
   destroyed() {
     document.removeEventListener("scroll", this.scrollHandle, false);
   },
-  watch: {
-    searchText(newVal, oldVal) {
-      this.searchTextChange(newVal);
-    }
-  }
+
 };
 </script>
 
 <style scoped lang="less">
-@import "../assets/css/var.less";
 .MallShow {
   width: 100%;
   .FixedNav {
@@ -216,7 +219,7 @@ export default {
     left: 0;
     height: 64px;
     background-color: white;
-    border-bottom: 1px solid @borderColor;
+    border-bottom: 1px solid #e6e8eb;
     animation: slideIn 0.3s;
     z-index: 10000;
   }
@@ -300,8 +303,8 @@ export default {
       cursor: pointer;
     }
     .selected {
-      color: @thirdColor;
-      border-bottom: 3px solid @thirdColor;
+      color: #b4a078;
+      border-bottom: 3px solid #b4a078;
     }
   }
   .fixedNavContainer {
@@ -312,7 +315,7 @@ export default {
       width: 15%;
       height: 100%;
       font-size: 30px;
-      color: @thirdColor;
+      color: #b4a078;
       user-select: none;
       line-height: 64px;
       text-align: center;
@@ -337,8 +340,8 @@ export default {
         top: 4px;
       }
       .selected {
-        color: @thirdColor;
-        border-bottom: 3px solid @thirdColor;
+        color: #b4a078;
+        border-bottom: 3px solid #b4a078;
       }
     }
   }

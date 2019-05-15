@@ -91,7 +91,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-@import "../../assets/css/var.less";
 .LoginBox {
   position: fixed;
   top: 0;
@@ -122,12 +121,12 @@ export default {
           text-align: center;
           padding: 5px 0;
           margin: 0 20px;
-          color: @fontDefaultColor;
+          color: #7d7d7d;
           cursor: pointer;
         }
         .select {
-          border-bottom: 2px solid @secondColor;
-          color: @secondColor;
+          border-bottom: 2px solid #0e90d2;
+          color: #0e90d2;
         }
       }
       .inputBoxContent {

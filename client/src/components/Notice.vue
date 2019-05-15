@@ -52,7 +52,6 @@ export default {
 </script>
 
 <style lang='less' scoped>
-@import "../assets/css/var.less";
 .NoticeBox {
   // margin-left: -30%;
   width: 300px;
@@ -79,7 +78,7 @@ export default {
       line-height: 40px;
       a {
         font-size: 18px;
-        color: @thirdColor;
+        color: #b4a078;
         cursor: pointer;
         text-decoration: underline;
         &:hover {
